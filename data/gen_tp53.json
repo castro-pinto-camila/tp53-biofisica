@@ -1,0 +1,29 @@
+{
+  "gen": "TP53",
+  "proteina": "p53 (antígeno celular tumoral p53)",
+  "uniprot_id": "P04637",
+  "ncbi_gene_id": "7157",
+  "organismo": "Homo sapiens",
+  "cromosoma": "17",
+  "banda_citogenetica": "17p13.1",
+  "ensamblaje": "GRCh38 (NC_000017.11)",
+  "coordenadas": {
+    "inicio": 7668420,
+    "fin": 7687489,
+    "cadena": "reversa (-)"
+  },
+  "num_exones": 13,
+  "longitud_aa": 393,
+  "secuencia_aa": "MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGPDEAPRMPEAAPPVAPAPAAPTPAAPAPAPSWPLSSSVPSQKTYQGSYGFRLGFLHSGTAKSVTCTYSPALNKMFCQLAKTCPVQLWVDSTPPPGTRVRAMAIYKQSQHMTEVVRRCPHHERCSDSDGLAPPQHLIRVEGNLRVEYLDDRNTFRHSVVVPYEPPEVGSDCTTIHYNYMCNSSCMGGMNRRPILTIITLEDSSGNLLGRNSFEVRVCACPGRDRRTEEENLRKKGEPHHELPPGSTKRALPNNTSSSPQPKKKPLDGEYFTLQIRGRERFEMFRELNEALELKDAQAGKEPGGSRAHSSHLKSKKGQSTSRHKKLMFKTEGPDSD",
+  "fuente_secuencia": "UniProt P04637 (canónica, SV=4) — rest.uniprot.org/uniprotkb/P04637.fasta",
+  "fuente_localizacion": "NCBI Gene ID 7157; GRCh38 / NC_000017.11 (eutils.ncbi.nlm.nih.gov)",
+  "funcion_general": "Factor de transcripción supresor de tumores, activado en respuesta a estrés genotóxico (daño al ADN). Se une al ADN como tetrámero para regular genes implicados en el ciclo celular, la apoptosis y la reparación del ADN — de ahí su apodo de «guardián del genoma».",
+  "estabilidad_wt": {
+    "ddG_plegamiento_25C_kcal_mol": 5.96,
+    "ddG_plegamiento_10C_kcal_mol": 9.76,
+    "tm_celsius": 42.9,
+    "temperatura_corporal_celsius": 37,
+    "nota": "El dominio de unión al ADN de p53 es sólo marginalmente estable: su temperatura de fusión (~42.9 °C) está apenas por encima de la temperatura corporal (37 °C). Por eso desestabilizaciones de tan solo 1-3 kcal/mol bastan para desplegarlo a temperatura fisiológica y abolir su función.",
+    "fuente": "Bullock, Henckel & Fersht 1997, PNAS 94:14338 (ΔG por urea); Tm por DSF, Life 2023, 13:31."
+  }
+}

@@ -1,0 +1,12 @@
+# Archivos temporales de Python (no hace falta subirlos)
+__pycache__/
+*.pyc
+*.pyo
+
+# Configuracion interna del entorno de desarrollo (no necesaria para publicar)
+.claude/
+
+# Basura del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,23 @@
+{
+  "union_ADN": {
+    "nombre": "Dominio de unión al ADN",
+    "inicio": 100,
+    "fin": 288,
+    "fuente": "UniProt P04637 / Pfam PF00870",
+    "relevancia": "Requiere carga positiva para interactuar con el ADN, cargado negativamente. Las mutaciones que eliminan carga positiva comprometen directamente la función supresora."
+  },
+  "oligomerizacion": {
+    "nombre": "Dominio de oligomerización",
+    "inicio": 319,
+    "fin": 357,
+    "fuente": "UniProt P04637 / Pfam PF07710",
+    "relevancia": "Los cambios en volumen o hidrofobicidad desestabilizan el ensamblaje del tetrámero, inactivando la proteína aunque el dominio de unión al ADN esté intacto."
+  },
+  "regulador": {
+    "nombre": "Región reguladora C-terminal",
+    "inicio": 364,
+    "fin": 393,
+    "fuente": "Región C-terminal desordenada (literatura)",
+    "relevancia": "Región intrínsecamente desordenada; su desorden es funcional (permite interacciones con múltiples proteínas reguladoras). No aparece como dominio formal en UniProt por su falta de estructura fija."
+  }
+}

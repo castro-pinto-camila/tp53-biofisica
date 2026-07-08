@@ -1,0 +1,140 @@
+{
+  "R175H": {
+    "nombre": "R175H",
+    "posicion": 175,
+    "aa_original": "Arg",
+    "aa_mutado": "His",
+    "dominio": "union_ADN",
+    "conservado": true,
+    "tipo_efecto": "Pérdida de función",
+    "gof": "No reportado",
+    "dne": "Yes",
+    "casos_iarc": 1216,
+    "clinvar_germinal": "Pathogenic",
+    "clinvar_somatico": "Tier I - Strong (accionable)",
+    "enfermedad": "Síndrome de Li-Fraumeni",
+    "afinidad_ADN": {
+      "clasificacion": "structural",
+      "kd_wt": "~7 nM (tipo salvaje)",
+      "efecto_mutante": "Desestabiliza el plegamiento del dominio de unión al ADN. No contacta directamente el ADN: el defecto es de estabilidad del pliegue, que colapsa a temperatura fisiológica.",
+      "referencia": "Joerger & Fersht 2008; Wong et al."
+    },
+    "estabilidad": {
+      "ddG_kcal_mol": 3.0,
+      "ddG_precision": "medido",
+      "ddG_fuente": "Bullock, Henckel & Fersht 1997, PNAS 94:14338 (desnaturalización con urea, 10 °C)",
+      "tm_celsius": null,
+      "delta_tm_celsius": null,
+      "tm_fuente": "por verificar",
+      "alphamissense_clase": "likely pathogenic",
+      "alphamissense_nota": "clasificación a nivel de clase; score decimal exacto no incluido",
+      "alphamissense_fuente": "Cheng et al. 2023, Science 381:eadg7492 (AlphaMissense)"
+    },
+    "canceres": ["Pulmón", "Mama", "Colon", "Recto", "Ovario"]
+  },
+  "R248W": {
+    "nombre": "R248W",
+    "posicion": 248,
+    "aa_original": "Arg",
+    "aa_mutado": "Trp",
+    "dominio": "union_ADN",
+    "conservado": true,
+    "tipo_efecto": "Pérdida de función + GOF",
+    "gof": "Interacción aberrante con p63/p73",
+    "dne": "Yes",
+    "casos_iarc": 765,
+    "clinvar_germinal": "Pathogenic",
+    "clinvar_somatico": "por verificar",
+    "enfermedad": "Síndrome de Li-Fraumeni",
+    "afinidad_ADN": {
+      "clasificacion": "contact",
+      "kd_wt": "~7 nM (tipo salvaje)",
+      "efecto_mutante": "Contacto directo con el ADN. Kd 2-7x mayor que el tipo salvaje. Muestra dependencia de temperatura documentada: une a bajas temperaturas y pierde la unión a temperatura fisiológica.",
+      "referencia": "Barakat et al. 2011; datos de microarray de unión al ADN de p53."
+    },
+    "estabilidad": {
+      "ddG_kcal_mol": 2.0,
+      "ddG_precision": "aproximado",
+      "ddG_fuente": "Joerger & Fersht 2008 (revisión); ~2 kcal/mol",
+      "tm_celsius": 39.3,
+      "delta_tm_celsius": -3.6,
+      "tm_fuente": "Differential scanning fluorimetry, Life 2023, 13:31 (WT 42.9 °C; R248W 39.3 °C)",
+      "alphamissense_clase": "likely pathogenic",
+      "alphamissense_nota": "clasificación a nivel de clase; score decimal exacto no incluido",
+      "alphamissense_fuente": "Cheng et al. 2023, Science 381:eadg7492 (AlphaMissense)"
+    },
+    "dependencia_temperatura": {
+      "une_por_debajo_de_celsius": 33,
+      "no_une_a_celsius": 37,
+      "explicacion": "Su Tm (39.3 °C) está apenas por encima de la temperatura corporal. A ~25-33 °C (298-306 K) el dominio se pliega y une el ADN; a 37 °C (310 K) está mayormente desplegado y pierde la unión, pese a que la cadena lateral de contacto solo fue sustituida.",
+      "fuente": "Barakat et al. 2011; comportamiento de unión dependiente de temperatura de p53(R248W)."
+    },
+    "canceres": ["Mama", "Esófago", "Cerebro", "Colon", "Pulmón"]
+  },
+  "G245S": {
+    "nombre": "G245S",
+    "posicion": 245,
+    "aa_original": "Gly",
+    "aa_mutado": "Ser",
+    "dominio": "union_ADN",
+    "conservado": true,
+    "tipo_efecto": "Pérdida de función",
+    "gof": "No reportado",
+    "dne": "Yes",
+    "casos_iarc": 456,
+    "clinvar_germinal": "Pathogenic",
+    "clinvar_somatico": "por verificar",
+    "enfermedad": "Síndrome de Li-Fraumeni",
+    "afinidad_ADN": {
+      "clasificacion": "structural",
+      "kd_wt": "~7 nM (tipo salvaje)",
+      "efecto_mutante": "Gly245 es importante para la flexibilidad del backbone. Sustituirla por un residuo con cadena lateral rigidiza el esqueleto local y desestabiliza el pliegue del dominio.",
+      "referencia": "Joerger & Fersht 2008."
+    },
+    "estabilidad": {
+      "ddG_kcal_mol": 1.0,
+      "ddG_precision": "aproximado",
+      "ddG_fuente": "Joerger, Ang & Fersht 2006, PNAS 103:15056 (~1 kcal/mol)",
+      "tm_celsius": null,
+      "delta_tm_celsius": null,
+      "tm_fuente": "por verificar",
+      "alphamissense_clase": "likely pathogenic",
+      "alphamissense_nota": "clasificación a nivel de clase; score decimal exacto no incluido",
+      "alphamissense_fuente": "Cheng et al. 2023, Science 381:eadg7492 (AlphaMissense)"
+    },
+    "canceres": ["Ovario", "Hígado", "Colon", "Páncreas", "Estómago"]
+  },
+  "R282W": {
+    "nombre": "R282W",
+    "posicion": 282,
+    "aa_original": "Arg",
+    "aa_mutado": "Trp",
+    "dominio": "oligomerizacion",
+    "conservado": true,
+    "tipo_efecto": "Pérdida de función",
+    "gof": "No reportado",
+    "dne": "Moderate",
+    "casos_iarc": 606,
+    "clinvar_germinal": "Pathogenic/Likely pathogenic",
+    "clinvar_somatico": "por verificar",
+    "enfermedad": "Síndrome de Li-Fraumeni",
+    "afinidad_ADN": {
+      "clasificacion": "structural",
+      "kd_wt": "~7 nM (tipo salvaje)",
+      "efecto_mutante": "Residuo estructural cercano a la superficie de unión. Su sustitución desestabiliza la región y tiene un efecto dominante negativo moderado sobre el tetrámero.",
+      "referencia": "Joerger & Fersht 2008."
+    },
+    "estabilidad": {
+      "ddG_kcal_mol": 3.0,
+      "ddG_precision": "límite inferior",
+      "ddG_fuente": "Joerger, Ang & Fersht 2006, PNAS 103:15056 (> 3 kcal/mol)",
+      "tm_celsius": null,
+      "delta_tm_celsius": null,
+      "tm_fuente": "por verificar",
+      "alphamissense_clase": "likely pathogenic",
+      "alphamissense_nota": "clasificación a nivel de clase; score decimal exacto no incluido",
+      "alphamissense_fuente": "Cheng et al. 2023, Science 381:eadg7492 (AlphaMissense)"
+    },
+    "canceres": ["Colon", "Estómago", "Piel", "Hígado", "Esófago"]
+  }
+}
