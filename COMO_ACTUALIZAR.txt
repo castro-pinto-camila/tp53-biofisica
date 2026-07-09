@@ -1,0 +1,55 @@
+========================================================================
+  COMO ACTUALIZAR LA APP EN LA NUBE (y por que el QR NO cambia)
+========================================================================
+
+TU APP:   https://tp53-biofisica.streamlit.app
+TU REPO:  github.com/castro-pinto-camila/tp53-biofisica
+TU QR:    QR_tp53_app.png  (en esta misma carpeta)
+
+------------------------------------------------------------------------
+LO PRIMERO Y MAS IMPORTANTE
+------------------------------------------------------------------------
+El QR apunta al ENLACE, no al contenido. Aunque cambies el codigo mil
+veces, el enlace es el mismo, asi que EL MISMO QR SIRVE PARA SIEMPRE.
+No tienes que volver a generarlo nunca (salvo que renombres el repo o
+borres la app, cosa que no pasa por editar el codigo).
+
+
+------------------------------------------------------------------------
+PASOS PARA QUE TUS CAMBIOS SE VEAN EN LA NUBE
+------------------------------------------------------------------------
+1. Edita los archivos en tu computadora (como siempre).
+
+2. PRUEBALO PRIMERO EN LOCAL: doble clic en INICIAR_APP.bat y revisa
+   que todo se vea bien. (Asi, si algo se rompe, lo ves aqui y no en la
+   version publica que van a escanear.)
+
+3. Abre GitHub Desktop. A la izquierda veras la lista de cambios.
+
+4. Abajo a la izquierda, en la cajita "Summary", escribe un resumen
+   corto (ej: "cambie el color del titulo") y haz clic en
+   "Commit to main".
+
+5. Arriba, haz clic en "Push origin".
+
+6. Listo. Streamlit Cloud detecta el cambio solo y se vuelve a armar
+   en 1 o 2 minutos. Refresca el enlace (o vuelve a escanear el QR) y
+   veras la version nueva.
+
+
+------------------------------------------------------------------------
+COSAS UTILES QUE RECORDAR
+------------------------------------------------------------------------
+- La app gratis "se duerme" si nadie la usa por varios dias. Si al
+  abrirla tarda ~30 segundos en despertar, es normal.
+  TRUCO PARA LA DEFENSA: abrela tu un par de minutos antes de empezar,
+  asi ya esta despierta cuando los demas escaneen el QR.
+
+- Si despues de un push la version en la nube FALLA (aparece en rojo),
+  casi siempre es un detalle del archivo requirements.txt. Copia el
+  error y pídele ayuda a Claude Code para resolverlo.
+
+- Para correr la app solo en tu compu (sin internet), usa
+  INICIAR_APP.bat. Para que la vean otros por el QR, usa el enlace.
+
+========================================================================

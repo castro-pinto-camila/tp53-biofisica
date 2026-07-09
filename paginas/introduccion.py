@@ -14,9 +14,11 @@ import os
 
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 from biofisica import cargar_gen, cargar_dominios, cargar_mutaciones
 from estilos import seccion
+from diagrama import SVG_DOGMA_CENTRAL
 
 gen = cargar_gen()
 dominios = cargar_dominios()
@@ -155,27 +157,20 @@ elif paso == 1:
         st.caption(f"Fuentes: {gen['fuente_secuencia']} · {gen['fuente_localizacion']}")
 
     st.markdown("---")
-    st.markdown("#### Regulación transcripcional de p53")
+    st.markdown("#### Cómo se produce la proteína p53")
+    st.caption(
+        "Igual que cualquier gen, TP53 se expresa siguiendo el dogma central: el "
+        "ADN se copia a ARN y el ARN se traduce en la proteína."
+    )
+    # Si algún día colocas tu propia imagen en imagenes/regulacion_transcripcional.png,
+    # se usa esa; si no, se muestra el diagrama SVG incorporado.
     _ruta_regulacion = os.path.join("imagenes", "regulacion_transcripcional.png")
     if os.path.exists(_ruta_regulacion):
-        st.image(
-            _ruta_regulacion,
-            caption="Regulación transcripcional de TP53/p53.",
-            width="stretch",
-        )
+        st.image(_ruta_regulacion, caption="Producción de la proteína p53.",
+                 width="stretch")
     else:
-        st.markdown(
-            """
-            <div class="placeholder-img">
-              Espacio reservado para la imagen del proceso de regulación
-              transcripcional de TP53.<br>
-              Para mostrarla aquí, coloca el archivo en
-              <code>imagenes/regulacion_transcripcional.png</code>
-              (mismo nombre exacto) y recarga la página.
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        # st.markdown sanitiza el SVG; components.html lo dibuja de forma fiable.
+        components.html(SVG_DOGMA_CENTRAL, height=470, scrolling=False)
 
 # ---------------------------------------------------------------------------
 # Paso 3 — Dominios funcionales
