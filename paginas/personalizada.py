@@ -48,6 +48,38 @@ st.markdown(
 )
 
 # ---------------------------------------------------------------------------
+# Nota didáctica: tipos de mutación (por qué el lab hace solo "missense")
+# ---------------------------------------------------------------------------
+with st.expander("¿Qué tipos de mutación existen? (y por qué este lab hace solo «missense»)"):
+    st.markdown(
+        "Las mutaciones puntuales se clasifican por **qué le hacen a la proteína**. "
+        "Tomando el codón de la **Arginina (CGG)** como ejemplo:"
+    )
+    st.markdown(
+        "| Tipo | Qué pasa | Ejemplo |\n"
+        "|---|---|---|\n"
+        "| **Sinónima** (silenciosa) | Cambia el ADN pero sigue codificando el **mismo** "
+        "aminoácido | CGG → CG**A** = sigue siendo Arg |\n"
+        "| **Missense** (no sinónima) | Cambia a un **aminoácido distinto** | CGG → **T**GG "
+        "= ahora Trp (¡esto es R248W!) |\n"
+        "| **Nonsense** (sin sentido) | Aparece un codón **STOP** y la proteína se **corta** "
+        "| CGA → **T**GA = STOP |"
+    )
+    st.markdown(
+        "Este laboratorio trabaja con **aminoácidos, no con codones**, así que solo "
+        "representa mutaciones **missense** (cambiar un aminoácido por otro) — que es "
+        "justo lo que importa para el impacto **biofísico**. Una mutación *sinónima* no "
+        "cambia el aminoácido (aquí se vería como «sin cambio»), y una *nonsense* corta "
+        "la proteína en vez de alterar una propiedad fisicoquímica; por eso ambas quedan "
+        "fuera del alcance de esta herramienta."
+    )
+    st.caption(
+        "«Sinónima» y «silenciosa» son el mismo tipo. Nota: incluso una mutación "
+        "sinónima puede, en casos puntuales, afectar el corte del ARN o la velocidad de "
+        "traducción — pero como regla general no cambia la proteína."
+    )
+
+# ---------------------------------------------------------------------------
 # Controles
 # ---------------------------------------------------------------------------
 seccion("Diseña tu mutación")
