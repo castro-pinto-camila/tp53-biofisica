@@ -22,6 +22,7 @@ from biofisica import (
     generar_texto_estabilidad,
     generar_texto_temperatura,
     fraccion_plegada,
+    SCORE_MAXIMO,
 )
 from grafo import construir_grafo
 from estilos import seccion
@@ -88,7 +89,7 @@ st.markdown(
     <div style="margin-top:0.6rem;">
       <div class="impact-badge" style="background:{_bg};color:{_fg};border:1px solid {_br};">
         Índice de impacto biofísico: <b>{r['nivel_impacto']}</b>
-        &nbsp;·&nbsp; {r['score_impacto']} / 14
+        &nbsp;·&nbsp; {r['score_impacto']} / {SCORE_MAXIMO}
       </div>
     </div>
     """,

@@ -22,6 +22,7 @@ from biofisica import (
     calcular_cambios,
     calcular_impacto,
     generar_interpretacion,
+    SCORE_MAXIMO,
 )
 from estilos import seccion
 
@@ -131,7 +132,7 @@ st.markdown(
     f"""
     <div class="impact-badge" style="background:{_bg};color:{_fg};border:1px solid {_br};">
       {aa_orig}{posicion}{aa_mut} &nbsp;·&nbsp; Índice heurístico: <b>{nivel}</b>
-      &nbsp;·&nbsp; {score} / 14
+      &nbsp;·&nbsp; {score} / {SCORE_MAXIMO}
     </div>
     """,
     unsafe_allow_html=True,

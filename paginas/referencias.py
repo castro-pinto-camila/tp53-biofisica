@@ -8,6 +8,7 @@ verificados; los que no se pudieron confirmar se marcan explícitamente.
 
 import streamlit as st
 
+from biofisica import SCORE_MAXIMO
 from estilos import seccion
 
 # ---------------------------------------------------------------------------
@@ -56,8 +57,10 @@ GLOSARIO = [
      "Cuando la p53 mutante adquiere actividades oncogénicas nuevas, más allá de "
      "perder su función supresora."),
     ("Índice de impacto biofísico",
-     "Nuestro puntaje heurístico (0–14) que combina los cambios fisicoquímicos y la "
-     "localización. Es didáctico, no un predictor clínico."),
+     f"Nuestro puntaje heurístico (0–{SCORE_MAXIMO}) que combina los cambios "
+     "fisicoquímicos y la localización. Los pesos son un diseño pedagógico "
+     "propio, no un score calibrado estadísticamente. Es didáctico, no un "
+     "predictor clínico."),
     ("Síndrome de Li-Fraumeni",
      "Predisposición hereditaria a múltiples cánceres, causada por mutaciones "
      "germinales en TP53."),

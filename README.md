@@ -91,8 +91,11 @@ py -c "import json; json.load(open('data/mutaciones.json', encoding='utf-8')); p
 
 - `calcular_cambios` — deltas de carga, hidrofobicidad (Kyte-Doolittle) y
   volumen (Zamyatnin), mas cambio de polaridad.
-- `calcular_impacto` — indice heuristico (0-14; Bajo/Moderado/Alto), inspirado en
-  la logica de SIFT/PolyPhen pero simplificado y transparente.
+- `calcular_impacto` — indice heuristico (0-`SCORE_MAXIMO`, actualmente 12;
+  Bajo/Moderado/Alto), inspirado en la logica de SIFT/PolyPhen pero simplificado
+  y transparente. Los pesos y umbrales son decisiones de diseño pedagogico
+  documentadas en `biofisica.py` (no estan calibrados contra un set de
+  validacion clinica).
 - `interpretar_mutacion` — integra mutacion + dominio + calculos.
 - `generar_interpretacion` / `generar_implicancias` — texto explicativo e
   implicancias (clinica, terapeutica, conceptual).

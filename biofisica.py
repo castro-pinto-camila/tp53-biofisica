@@ -136,7 +136,35 @@ def calcular_cambios(aa_original, aa_mutado):
 
 # ---------------------------------------------------------------------------
 # 2. Indice heuristico de impacto biofisico
+#
+# Pesos de diseño pedagógico (NO calibrados estadísticamente contra un set de
+# validación clínica): cada uno se justifica con un argumento biofísico
+# concreto, pero los números exactos son una decisión de diseño de este
+# proyecto, inspirada en la lógica general de SIFT/PolyPhen — no están
+# tomados de una publicación con esos pesos exactos. Ver README / defensa
+# para la justificación de cada peso.
 # ---------------------------------------------------------------------------
+PESO_CARGA = 3          # union proteina-ADN es electrostatica: perder carga
+                         # positiva (contacto directo con fosfatos) es lo mas grave
+PESO_HIDROFOBICIDAD = 2  # cambio de empaquetamiento interno / exposicion al solvente
+PESO_VOLUMEN = 2         # riesgo de choque esterico o cavidad
+PESO_POLARIDAD = 2       # incompatibilidad categorica con el entorno (enterrado/expuesto)
+PESO_DOMINIO_UNION_ADN = 2        # la mayoria de mutaciones clinicas de TP53 caen aqui (IARC)
+PESO_DOMINIO_OLIGOMERIZACION = 1  # interfaz funcional, pero mas localizada
+PESO_CONSERVADO = 1      # bonus simple, no es un score de alineamiento evolutivo real
+
+UMBRAL_CARGA = 1
+UMBRAL_HIDROFOBICIDAD = 2
+UMBRAL_VOLUMEN = 50
+
+# Maximo teorico DERIVADO de los pesos de arriba (no escrito a mano en cada
+# pagina): así nunca queda desincronizado si se ajustan los pesos.
+SCORE_MAXIMO = (
+    PESO_CARGA + PESO_HIDROFOBICIDAD + PESO_VOLUMEN + PESO_POLARIDAD
+    + max(PESO_DOMINIO_UNION_ADN, PESO_DOMINIO_OLIGOMERIZACION) + PESO_CONSERVADO
+)
+
+
 def calcular_impacto(cambios, dominio, conservado):
     """Indice heuristico de impacto biofisico.
 
@@ -144,26 +172,26 @@ def calcular_impacto(cambios, dominio, conservado):
     severidad del cambio fisicoquimico), pero deliberadamente SIMPLIFICADO y
     transparente para fines didacticos. No es un predictor clinico.
 
-    Devuelve (nivel, score).
+    Devuelve (nivel, score). El score maximo posible es SCORE_MAXIMO.
     """
     score = 0
 
-    if abs(cambios["delta_carga"]) >= 1:
-        score += 3
-    if abs(cambios["delta_hidrofobicidad"]) >= 2:
-        score += 2
-    if abs(cambios["delta_volumen"]) >= 50:
-        score += 2
+    if abs(cambios["delta_carga"]) >= UMBRAL_CARGA:
+        score += PESO_CARGA
+    if abs(cambios["delta_hidrofobicidad"]) >= UMBRAL_HIDROFOBICIDAD:
+        score += PESO_HIDROFOBICIDAD
+    if abs(cambios["delta_volumen"]) >= UMBRAL_VOLUMEN:
+        score += PESO_VOLUMEN
     if cambios["cambia_polaridad"]:
-        score += 2
+        score += PESO_POLARIDAD
 
     if dominio == "union_ADN":
-        score += 2
+        score += PESO_DOMINIO_UNION_ADN
     elif dominio == "oligomerizacion":
-        score += 1
+        score += PESO_DOMINIO_OLIGOMERIZACION
 
     if conservado:
-        score += 1
+        score += PESO_CONSERVADO
 
     if score <= 3:
         nivel = "Bajo"
@@ -461,6 +489,6 @@ if __name__ == "__main__":
               % (r["nombre"], r["aa_original"], r["posicion"], r["aa_mutado"],
                  r["dominio_clave"]))
         print("  Cambios:", r["cambios"])
-        print("  Impacto: %s (score %d/14)" % (r["nivel_impacto"], r["score_impacto"]))
+        print("  Impacto: %s (score %d/%d)" % (r["nivel_impacto"], r["score_impacto"], SCORE_MAXIMO))
         print("  Afinidad:", r["afinidad_ADN"]["clasificacion"])
         print("  Interpretacion:", generar_interpretacion(r))

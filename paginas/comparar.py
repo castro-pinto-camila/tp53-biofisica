@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
 
-from biofisica import cargar_mutaciones, interpretar_mutacion
+from biofisica import cargar_mutaciones, interpretar_mutacion, SCORE_MAXIMO
 from estilos import seccion
 
 mutaciones = cargar_mutaciones()
@@ -115,7 +115,7 @@ for nombre in opciones:
       <td>{dominio_nombre}</td>
       <td>{clasif_txt}</td>
       <td>{ddg_txt}</td>
-      <td>{r['nivel_impacto']} ({r['score_impacto']} / 14)</td>
+      <td>{r['nivel_impacto']} ({r['score_impacto']} / {SCORE_MAXIMO})</td>
       <td>{dne_txt}</td>
     </tr>
     """
@@ -191,7 +191,7 @@ for nombre in opciones:
     ddg = r.get("estabilidad", {}).get("ddG_kcal_mol")
     if ddg is None:
         continue
-    val_x.append(r["score_impacto"] / 14.0)
+    val_x.append(r["score_impacto"] / SCORE_MAXIMO)
     val_y.append(min(ddg / _DDG_REF, 1.0))
     val_lbl.append(nombre)
     val_col.append(COLORES_MUT[nombre])
