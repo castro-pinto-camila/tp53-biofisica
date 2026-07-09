@@ -19,6 +19,23 @@ COLOR_CANCER = "#2c6b8f"     # azul apagado
 COLOR_ARISTA = "#c3ccd6"     # gris claro
 FONDO = "#ffffff"
 
+# Enlaces al Instituto Nacional del Cáncer (NCI, en español). Cada uno fue
+# VERIFICADO (HTTP 200 + título correcto) el 2026-07-08; no son enlaces
+# inventados. Colon y Recto comparten la página de cáncer colorrectal.
+URLS_CANCER = {
+    "Pulmón":   "https://www.cancer.gov/espanol/tipos/pulmon",
+    "Mama":     "https://www.cancer.gov/espanol/tipos/seno",
+    "Colon":    "https://www.cancer.gov/espanol/tipos/colorrectal",
+    "Recto":    "https://www.cancer.gov/espanol/tipos/colorrectal",
+    "Ovario":   "https://www.cancer.gov/espanol/tipos/ovario",
+    "Esófago":  "https://www.cancer.gov/espanol/tipos/esofago",
+    "Cerebro":  "https://www.cancer.gov/espanol/tipos/cerebro",
+    "Estómago": "https://www.cancer.gov/espanol/tipos/estomago",
+    "Hígado":   "https://www.cancer.gov/espanol/tipos/higado",
+    "Páncreas": "https://www.cancer.gov/espanol/tipos/pancreas",
+    "Piel":     "https://www.cancer.gov/espanol/tipos/piel",
+}
+
 
 def construir_grafo():
     """Construye el grafo y devuelve la ruta al HTML generado."""
@@ -87,13 +104,18 @@ def construir_grafo():
         # Nodos de cancer + aristas
         for cancer in mut.get("canceres", []):
             if cancer not in canceres_agregados:
+                url = URLS_CANCER.get(cancer)
+                titulo = "Tipo de cáncer: %s" % cancer
+                if url:
+                    titulo += " — clic para leer en cancer.gov (NCI)"
                 net.add_node(
                     cancer,
                     label=cancer,
-                    title="Tipo de cancer: %s" % cancer,
+                    title=titulo,
                     color=COLOR_CANCER,
                     size=24,
                     shape="dot",
+                    url=url,  # atributo propio, leído por el manejador de clic (JS)
                     font={"size": 18, "color": "#33465c", "strokeWidth": 3, "strokeColor": "#ffffff"},
                 )
                 canceres_agregados.add(cancer)
@@ -170,6 +192,26 @@ def construir_grafo():
         });
         // Respaldo por si el evento ya ocurrio antes de registrar el listener.
         setTimeout(acercar, 1000);
+
+        // Clic en un nodo de cancer -> abre su pagina en cancer.gov (NCI).
+        network.on("click", function (params) {
+          if (params.nodes && params.nodes.length > 0) {
+            var nodo = network.body.data.nodes.get(params.nodes[0]);
+            if (nodo && nodo.url) {
+              window.open(nodo.url, "_blank", "noopener");
+            }
+          }
+        });
+        // Cursor de mano al pasar sobre un nodo con enlace.
+        network.on("hoverNode", function (params) {
+          var nodo = network.body.data.nodes.get(params.node);
+          var cont = network.canvas && network.canvas.frame ? network.canvas.frame : null;
+          if (cont) { cont.style.cursor = (nodo && nodo.url) ? "pointer" : "default"; }
+        });
+        network.on("blurNode", function () {
+          var cont = network.canvas && network.canvas.frame ? network.canvas.frame : null;
+          if (cont) { cont.style.cursor = "default"; }
+        });
       })();
     </script>
     """

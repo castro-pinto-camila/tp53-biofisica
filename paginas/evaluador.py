@@ -397,9 +397,10 @@ for titulo, texto in generar_implicancias(r):
 seccion("Red de mutaciones y tipos de cáncer")
 st.caption(
     "Nodos rojos: mutaciones. Nodos azules: tipos de cáncer (columna Topography de "
-    "IARC). Arrastra los nodos para reorganizar la red. Usa los botones de la "
-    "esquina inferior izquierda del grafo para acercar, alejar o volver a la "
-    "vista original."
+    "IARC). **Haz clic en un tipo de cáncer** para abrir su página explicativa en "
+    "cancer.gov (Instituto Nacional del Cáncer, en español). Arrastra los nodos para "
+    "reorganizar la red; usa los botones de la esquina inferior izquierda para "
+    "acercar, alejar o volver a la vista original."
 )
 try:
     ruta_grafo = construir_grafo()
