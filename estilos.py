@@ -43,7 +43,14 @@ _CSS = """
     /* --- Gradiente de cabecera (banner hero) --- */
     --hero-a: #1f3a5f;   /* navy profundo */
     --hero-b: #2c6b8f;   /* teal          */
-    --hero-c: #7a2f3a;   /* acento ladrillo para el borde inferior */
+    --hero-c: #7a2f3a;   /* acento vino para el borde inferior del hero */
+
+    /* --- Subtítulos de sección: SIEMPRE oscuros, fijos --- */
+    /* A diferencia de --navy (que se aclara en modo oscuro), estos dos NO se
+       redefinen dentro del @media prefers-color-scheme: dark de abajo, así que
+       el subtítulo y su barra de acento se mantienen oscuros en ambos modos. */
+    --section-heading: #16283f;  /* navy muy oscuro, fijo               */
+    --wine-accent:     #7a2f3a;  /* mismo vino del borde de la tarjeta título */
 
     /* --- Espaciado y forma --- */
     --radius:   8px;
@@ -129,16 +136,19 @@ _CSS = """
   .hero-banner .hero-note b { color: #ffffff; }
 
   /* Encabezados de sección (con acento lateral en gradiente) */
+  /* color y barra usan tokens FIJOS (--section-heading / --wine-accent), no
+     los adaptativos --navy/--teal/--brick, para que nunca se aclaren en modo
+     oscuro: siempre navy oscuro con un toque de vino. */
   .section-h {
       font-family: var(--serif); font-size: 1.3rem; font-weight: 600;
-      color: var(--navy); border-bottom: 1px solid var(--border);
+      color: var(--section-heading); border-bottom: 1px solid var(--border);
       padding-bottom: 0.35rem; margin: 1.8rem 0 0.9rem;
       display: flex; align-items: center; gap: 0.55rem;
   }
   .section-h::before {
       content: ""; display: inline-block; width: 6px; height: 1.05em;
       border-radius: 3px; flex: none;
-      background: linear-gradient(180deg, var(--teal), var(--brick));
+      background: linear-gradient(180deg, var(--section-heading), var(--wine-accent));
   }
 
   /* --- Recuadro "qué vas a aprender" (objetivos de aprendizaje) --- */
@@ -243,14 +253,20 @@ _CSS = """
   }
 
   /* Tabla comparativa (página "Comparar mutaciones") */
+  /* Cabecera con el mismo navy oscuro fijo que los subtítulos de sección (no
+     el --navy adaptativo, que en modo oscuro se aclaraba y dejaba el
+     encabezado en azul pálido con texto blanco casi ilegible). Cada <td>
+     ahora lleva SIEMPRE un fondo explícito emparejado con su color de texto
+     (antes solo las filas pares lo tenían; las impares heredaban un fondo que
+     no correspondía al texto claro, dejándolo casi invisible). */
   .tabla-comp { width: 100%; border-collapse: collapse; font-size: 0.92rem;
                 margin: 0.5rem 0 1.2rem; }
   .tabla-comp th {
-      background: var(--navy); color: #ffffff; font-family: var(--serif);
+      background: var(--section-heading); color: #ffffff; font-family: var(--serif);
       font-weight: 600; text-align: left; padding: 0.55rem 0.75rem;
   }
   .tabla-comp td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border-soft);
-                   color: var(--ink); }
+                   background: var(--surface); color: var(--ink); }
   .tabla-comp tr:nth-child(even) td { background: var(--bg-soft); }
 
   /* --- Responsive: en pantallas angostas, las tarjetas no fuerzan altura --- */
