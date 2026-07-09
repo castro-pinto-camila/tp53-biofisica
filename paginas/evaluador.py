@@ -416,16 +416,31 @@ except Exception as exc:  # noqa: BLE001
 # ---------------------------------------------------------------------------
 # 9. Visualización 3D interactiva (3Dmol.js sobre la estructura 1TUP)
 # ---------------------------------------------------------------------------
-seccion("Estructura tridimensional (interactiva)")
+seccion("Estructura tridimensional — proteína sana (tipo salvaje)")
+
 _es_contacto = afinidad.get("clasificacion") == "contact"
+_orig = f"{r['aa_original']}{r['posicion']}"
+
+st.info(
+    f"Ojo: lo que ves es la estructura de p53 **sana** (tipo salvaje, PDB 1TUP). "
+    f"Lo resaltado en rojo es **{_orig}**, el aminoácido *original* en la posición donde "
+    f"ocurre {r['nombre']} ({r['aa_original']} → {r['aa_mutado']}). **No** se muestra el "
+    f"aminoácido mutante ({r['aa_mutado']}), porque no existe una estructura 3D "
+    f"experimental de esta mutante y no la inventamos. Lo valioso aquí es ver **dónde** "
+    f"golpea el cambio y su papel espacial."
+)
+
+if _es_contacto:
+    _pista = (f"Fíjate cómo la {_orig} (original) se asoma hacia el ADN: por eso una "
+              f"mutación en esta posición es un defecto de CONTACTO.")
+else:
+    _pista = (f"Fíjate cómo la {_orig} (original) queda dentro del cuerpo de la proteína, "
+              f"lejos del ADN: por eso su papel es ESTRUCTURAL (sostiene el pliegue).")
+
 st.caption(
-    ("Arrastra para rotar y usa la rueda para acercar. Proteína en gris, ADN en "
-     "naranja, zinc estructural en gris oscuro, y el residuo %s%d resaltado en rojo. "
-     % (r["aa_original"], r["posicion"]))
-    + ("Fíjate cómo el residuo se asoma hacia el ADN: es un defecto de CONTACTO."
-       if _es_contacto else
-       "Fíjate cómo el residuo queda dentro del cuerpo de la proteína, lejos del ADN: "
-       "su papel es ESTRUCTURAL (sostiene el pliegue).")
+    "Arrastra para rotar y usa los botones (esquina inferior izquierda) para acercar, "
+    "alejar o volver a la vista original. Proteína en gris, ADN en naranja, zinc "
+    "estructural en gris oscuro. " + _pista
 )
 try:
     from estructura3d import generar_html_3d
