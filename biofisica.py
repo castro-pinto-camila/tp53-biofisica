@@ -10,6 +10,7 @@ en IARC, ClinVar y UniProt/Pfam.
 import json
 import math
 import os
+from functools import lru_cache
 
 # ---------------------------------------------------------------------------
 # Rutas de datos (relativas a este archivo, robustas ante el cwd)
@@ -62,17 +63,29 @@ TRES_A_UNA = {v: k for k, v in UNA_A_TRES.items()}
 
 # ---------------------------------------------------------------------------
 # Carga de datos
+#
+# Los tres JSON son estáticos durante la sesión, así que se cachean con
+# lru_cache: en las páginas de Streamlit estas funciones se llaman muchas veces
+# por rerun (p. ej. dominio_en_posicion / aa_tres_en_posicion las invocan por
+# cada consulta), y sin caché se reabriría y reparsearía el archivo cada vez.
+# Se usa lru_cache en vez de st.cache_data para que el motor siga siendo puro
+# (sin dependencia de Streamlit) y funcione igual en el smoke test y en pytest.
+# NOTA: devuelven el MISMO objeto cacheado; los consumidores no deben mutarlo
+# in situ (interpretar_mutacion ya copia con dict(mut) antes de modificar).
 # ---------------------------------------------------------------------------
+@lru_cache(maxsize=1)
 def cargar_mutaciones():
     with open(_RUTA_MUTACIONES, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
+@lru_cache(maxsize=1)
 def cargar_dominios():
     with open(_RUTA_DOMINIOS, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
+@lru_cache(maxsize=1)
 def cargar_gen():
     with open(_RUTA_GEN, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -471,6 +484,55 @@ def generar_texto_temperatura(resultado):
 
 
 # ---------------------------------------------------------------------------
+# 8. Verificacion de consistencia de los datos curados
+#
+# Cada mutacion catalogada afirma un dominio y un aminoacido original; ambos
+# tienen que coincidir con las fuentes canonicas ya cargadas (dominios.json y
+# la secuencia de UniProt). Esta funcion cruza esas afirmaciones para detectar
+# inconsistencias silenciosas -por ejemplo, una mutacion asignada al dominio
+# equivocado- que de otro modo solo se verian como texto contradictorio en la
+# interfaz. Devuelve la lista de problemas encontrados (vacia = todo coherente).
+# ---------------------------------------------------------------------------
+def verificar_consistencia_datos():
+    """Cruza cada mutacion curada contra las fuentes canonicas.
+
+    Comprueba, para cada mutacion:
+      1. que su `aa_original` coincida con la secuencia canonica en `posicion`;
+      2. que su `dominio` sea el que realmente contiene esa `posicion` segun
+         dominios.json (si la posicion cae dentro de algun dominio anotado).
+
+    Devuelve una lista de cadenas describiendo cada inconsistencia.
+    """
+    problemas = []
+    mutaciones = cargar_mutaciones()
+
+    for nombre, m in mutaciones.items():
+        pos = m["posicion"]
+
+        # 1. aminoacido original vs secuencia canonica
+        aa_seq = aa_tres_en_posicion(pos)
+        if aa_seq is None:
+            problemas.append(
+                "%s: la posicion %d esta fuera de la secuencia canonica." % (nombre, pos)
+            )
+        elif aa_seq != m["aa_original"]:
+            problemas.append(
+                "%s: aa_original=%s pero la secuencia canonica tiene %s en la posicion %d."
+                % (nombre, m["aa_original"], aa_seq, pos)
+            )
+
+        # 2. dominio declarado vs dominio que contiene la posicion
+        clave_real, _ = dominio_en_posicion(pos)
+        if clave_real is not None and clave_real != m["dominio"]:
+            problemas.append(
+                "%s: dominio declarado '%s' pero la posicion %d cae en '%s'."
+                % (nombre, m["dominio"], pos, clave_real)
+            )
+
+    return problemas
+
+
+# ---------------------------------------------------------------------------
 # Prueba rapida
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
@@ -481,6 +543,15 @@ if __name__ == "__main__":
         sys.stdout.reconfigure(encoding="utf-8")
     except Exception:
         pass
+
+    # Verificacion de consistencia primero: si algo no cuadra, se avisa arriba.
+    _problemas = verificar_consistencia_datos()
+    if _problemas:
+        print("!! INCONSISTENCIAS DE DATOS DETECTADAS:")
+        for _p in _problemas:
+            print("   - " + _p)
+    else:
+        print(">> Consistencia de datos: OK (dominio y aa_original coinciden con las fuentes).")
 
     for nombre in cargar_mutaciones():
         r = interpretar_mutacion(nombre)

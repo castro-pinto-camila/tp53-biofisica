@@ -63,6 +63,50 @@ PREGUNTAS.append({
     "explicacion": "El cambio químico local (Arg→His) es leve, pero desestabiliza mucho "
                    "el pliegue. Por eso somos una herramienta didáctica, no un predictor.",
 })
+PREGUNTAS.append({
+    "pregunta": "El dominio de unión al ADN de p53 necesita **carga positiva** para "
+                "funcionar. ¿Por qué?",
+    "opciones": [
+        "Atrae al esqueleto fosfato del ADN, que está cargado negativamente",
+        "Repele al ADN para no unirse demasiado fuerte",
+        "La carga no influye en la unión al ADN",
+    ],
+    "correcta": "Atrae al esqueleto fosfato del ADN, que está cargado negativamente",
+    "explicacion": "Por eso perder una arginina (+1) en el dominio de unión, como en "
+                   "R175H, R248W o R282W, debilita directamente el contacto proteína-ADN.",
+})
+PREGUNTAS.append({
+    "pregunta": "¿Qué significa el **efecto dominante negativo (DNE)** de una mutación "
+                "de p53?",
+    "opciones": [
+        "La subunidad mutante inactiva también al alelo sano dentro del tetrámero",
+        "La mutación solo afecta si están mutadas las dos copias del gen",
+        "La proteína mutante gana una función oncogénica nueva",
+    ],
+    "correcta": "La subunidad mutante inactiva también al alelo sano dentro del tetrámero",
+    "explicacion": "p53 funciona como tetrámero; una subunidad mutante «envenena» el "
+                   "complejo mezclándose con las normales. La última opción describe la "
+                   "ganancia de función (GOF), que es un fenómeno distinto.",
+})
+PREGUNTAS.append({
+    "pregunta": "La **mayoría** de las mutaciones de TP53 en tumores son… ",
+    "opciones": ["Somáticas (no se heredan)", "Germinales (heredadas)", "Sinónimas"],
+    "correcta": "Somáticas (no se heredan)",
+    "explicacion": "Surgen durante la vida en una célula concreta. Una minoría son "
+                   "germinales y causan el síndrome de Li-Fraumeni.",
+})
+PREGUNTAS.append({
+    "pregunta": "El **índice de impacto biofísico** de esta app es…",
+    "opciones": [
+        "Una heurística didáctica no calibrada clínicamente",
+        "Un predictor clínico validado equivalente a AlphaMissense",
+        "Una medida experimental de laboratorio",
+    ],
+    "correcta": "Una heurística didáctica no calibrada clínicamente",
+    "explicacion": "Combina cambios fisicoquímicos y localización con pesos de diseño "
+                   "pedagógico. La página «Comparar» muestra dónde acierta y dónde falla "
+                   "frente al ΔΔG medido.",
+})
 
 
 # ---------------------------------------------------------------------------

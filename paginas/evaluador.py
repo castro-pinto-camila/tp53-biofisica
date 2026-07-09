@@ -47,8 +47,11 @@ st.markdown(
 mutaciones = cargar_mutaciones()
 opciones = list(mutaciones.keys())
 
+# Permalink: abrir la app con ?mut=R248W preselecciona esa mutación, de modo que
+# se puede compartir un enlace directo a un caso concreto.
+_mut_qp = st.query_params.get("mut")
 if "mutacion_sel" not in st.session_state:
-    st.session_state.mutacion_sel = opciones[0]
+    st.session_state.mutacion_sel = _mut_qp if _mut_qp in opciones else opciones[0]
 
 seccion("Selección de mutación")
 st.caption("Elige una mutación hotspot de TP53 para analizar su mecanismo biofísico.")
@@ -72,6 +75,8 @@ for col, nombre in zip(cols_btn, opciones):
             st.rerun()
 
 seleccion = st.session_state.mutacion_sel
+# Mantener la URL sincronizada con la selección → el enlace es copiable/compartible.
+st.query_params["mut"] = seleccion
 r = interpretar_mutacion(seleccion)
 
 # --- Etiqueta de impacto ---
@@ -92,6 +97,74 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+
+# --- Exportar informe de una página + enlace compartible ---
+def _construir_informe(res):
+    """Informe Markdown autocontenido de la mutación seleccionada, para descargar."""
+    c = res["cambios"]
+    est = res.get("estabilidad", {})
+    afi = res.get("afinidad_ADN", {})
+    ddg = est.get("ddG_kcal_mol")
+    ddg_txt = "no disponible" if ddg is None else (
+        "%s %.0f kcal/mol (%s)" % (
+            ">" if est.get("ddG_precision") == "límite inferior" else "≈",
+            ddg, est.get("ddG_precision", ""))
+    )
+    lineas = [
+        "# Informe biofísico — %s (%s%d%s)" % (
+            res["nombre"], res["aa_original"], res["posicion"], res["aa_mutado"]),
+        "",
+        "_Generado por el Evaluador de Impacto Biofísico de Mutaciones en TP53 "
+        "(herramienta didáctica; no es un predictor clínico)._",
+        "",
+        "## Panorama",
+        "- **Tipo de efecto:** %s" % res.get("tipo_efecto", "—"),
+        "- **Dominio:** %s" % res.get("dominio_info", {}).get("nombre", res["dominio_clave"]),
+        "- **Índice de impacto biofísico:** %s (%d / %d)" % (
+            res["nivel_impacto"], res["score_impacto"], SCORE_MAXIMO),
+        "- **Mecanismo de pérdida de afinidad al ADN:** %s" % (afi.get("clasificacion", "—")),
+        "",
+        "## Cambios fisicoquímicos (mutado − original)",
+        "- Δ Carga: %+.2f" % c["delta_carga"],
+        "- Δ Hidrofobicidad (Kyte–Doolittle): %+.2f" % c["delta_hidrofobicidad"],
+        "- Δ Volumen: %+.2f Å³" % c["delta_volumen"],
+        "- Polaridad: %s → %s" % (c["polaridad_original"], c["polaridad_mutada"]),
+        "",
+        "## Estabilidad e implicancias",
+        "- **ΔΔG (desestabilización del pliegue):** %s" % ddg_txt,
+        "- **Efecto del mutante:** %s" % afi.get("efecto_mutante", "—"),
+        "",
+        "## Evidencia clínica",
+        "- Enfermedad: %s" % res.get("enfermedad", "—"),
+        "- Casos en IARC: %s" % res.get("casos_iarc", "—"),
+        "- ClinVar (germinal): %s" % res.get("clinvar_germinal", "—"),
+        "",
+        "## Interpretación",
+        generar_interpretacion(res),
+        "",
+        "---",
+        "Fuentes: IARC TP53 Database (R21, 2025); ClinVar; UniProt P04637; "
+        "Bullock & Fersht 1997; Joerger et al. 2006. Índice heurístico: diseño "
+        "pedagógico propio, no calibrado clínicamente.",
+    ]
+    return "\n".join(lineas)
+
+
+col_share, col_dl = st.columns([2, 1])
+with col_share:
+    st.caption(
+        f"Enlace directo a esta mutación: añade `?mut={seleccion}` a la URL de la app "
+        f"para compartir este caso (la URL ya se actualiza sola al cambiar de mutación)."
+    )
+with col_dl:
+    st.download_button(
+        "Descargar informe (.md)",
+        data=_construir_informe(r),
+        file_name=f"informe_{seleccion}_TP53.md",
+        mime="text/markdown",
+        use_container_width=True,
+    )
 
 # ---------------------------------------------------------------------------
 # 3. Tres tarjetas: cambio de aminoácido / localización / evidencia clínica
@@ -241,30 +314,64 @@ seccion("Mecanismo de pérdida de afinidad al ADN")
 afinidad = r.get("afinidad_ADN", {})
 clasif = afinidad.get("clasificacion", "")
 
-if clasif == "contact":
+# --- Predice antes de revelar (aprendizaje activo) ---
+# El usuario razona el mecanismo ANTES de ver la respuesta. La predicción se
+# guarda por mutación, así que al cambiar de mutación vuelve a preguntar.
+if "pred_mec" not in st.session_state:
+    st.session_state.pred_mec = {}
+
+_correcta = {"contact": "Contacto", "structural": "Estructural"}.get(clasif)
+_ya = st.session_state.pred_mec.get(seleccion)
+
+if _correcta and not _ya:
     st.markdown(
-        """
-        <div class="callout" style="background:#f4e6e6;border-left:4px solid #a23b3b;">
-          <div class="callout-t" style="color:#8f2f2f;">Mecanismo de CONTACTO</div>
-          El residuo tocaba directamente el ADN. El pliegue se conserva, pero se pierde
-          el contacto químico específico que sostiene la unión.
-        </div>
-        """,
-        unsafe_allow_html=True,
+        "**Antes de ver la respuesta, predice:** con los cambios fisicoquímicos de "
+        "arriba, ¿el defecto de esta mutación es de **contacto** directo con el ADN "
+        "o **estructural** (desestabiliza el pliegue)?"
     )
-elif clasif == "structural":
-    st.markdown(
-        """
-        <div class="callout" style="background:#f6efdd;border-left:4px solid #b07d1a;">
-          <div class="callout-t" style="color:#8a6a12;">Mecanismo ESTRUCTURAL</div>
-          El residuo no contacta el ADN, pero sostiene el pliegue del dominio. Su
-          mutación desestabiliza la estructura y, con ella, la capacidad de unir ADN.
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    cpa, cpb, cpc = st.columns([1, 1, 1.2])
+    if cpa.button("Contacto", key=f"pred_c_{seleccion}", use_container_width=True):
+        st.session_state.pred_mec[seleccion] = "Contacto"
+        st.rerun()
+    if cpb.button("Estructural", key=f"pred_e_{seleccion}", use_container_width=True):
+        st.session_state.pred_mec[seleccion] = "Estructural"
+        st.rerun()
+    if cpc.button("Ver respuesta sin adivinar", key=f"pred_s_{seleccion}",
+                  use_container_width=True):
+        st.session_state.pred_mec[seleccion] = "—"
+        st.rerun()
 else:
-    st.info("Mecanismo: por verificar.")
+    if _correcta and _ya and _ya != "—":
+        if _ya == _correcta:
+            st.success(f"Predijiste **{_ya}** — correcto.")
+        else:
+            st.error(f"Predijiste **{_ya}**, pero el mecanismo es **{_correcta}**. "
+                     f"Mira por qué abajo.")
+
+    if clasif == "contact":
+        st.markdown(
+            """
+            <div class="callout" style="background:#f4e6e6;border-left:4px solid #a23b3b;">
+              <div class="callout-t" style="color:#8f2f2f;">◆ Mecanismo de CONTACTO</div>
+              El residuo tocaba directamente el ADN. El pliegue se conserva, pero se pierde
+              el contacto químico específico que sostiene la unión.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    elif clasif == "structural":
+        st.markdown(
+            """
+            <div class="callout" style="background:#f6efdd;border-left:4px solid #b07d1a;">
+              <div class="callout-t" style="color:#8a6a12;">▲ Mecanismo ESTRUCTURAL</div>
+              El residuo no contacta el ADN, pero sostiene el pliegue del dominio. Su
+              mutación desestabiliza la estructura y, con ella, la capacidad de unir ADN.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        st.info("Mecanismo: por verificar.")
 
 ca, cb = st.columns(2)
 ca.markdown(f"**Afinidad de referencia (Kd):** {afinidad.get('kd_wt', '—')}")

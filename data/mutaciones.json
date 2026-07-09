@@ -109,7 +109,7 @@
     "posicion": 282,
     "aa_original": "Arg",
     "aa_mutado": "Trp",
-    "dominio": "oligomerizacion",
+    "dominio": "union_ADN",
     "conservado": true,
     "tipo_efecto": "Pérdida de función",
     "gof": "No reportado",

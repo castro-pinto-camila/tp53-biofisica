@@ -16,6 +16,7 @@ from biofisica import (
     TRES_A_UNA,
     cargar_gen,
     cargar_dominios,
+    cargar_mutaciones,
     aa_tres_en_posicion,
     dominio_en_posicion,
     mutacion_catalogada,
@@ -140,11 +141,22 @@ if aa_mut == aa_orig:
             "Elige un aminoácido distinto para ver el análisis.")
     st.stop()
 
-cambios = calcular_cambios(aa_orig, aa_mut)
-nivel, score = calcular_impacto(cambios, dom_clave, conservado=False)
-
 # Aviso si coincide con una mutación catalogada
 catalogada = mutacion_catalogada(posicion, aa_mut)
+
+# El flag `conservado` es una propiedad de la POSICIÓN, no de la sustitución.
+# Solo lo tenemos curado para las 4 hotspot: si la mutación elegida coincide con
+# una de ellas, usamos su valor real para que el score sea IDÉNTICO al del
+# Evaluador (antes el Laboratorio fijaba conservado=False y daba un score
+# distinto para la misma mutación). Para posiciones sin dato, queda False y se
+# advierte abajo en el pie.
+if catalogada:
+    conservado = cargar_mutaciones()[catalogada]["conservado"]
+else:
+    conservado = False
+
+cambios = calcular_cambios(aa_orig, aa_mut)
+nivel, score = calcular_impacto(cambios, dom_clave, conservado=conservado)
 if catalogada:
     st.success(
         f"Esta mutación coincide con **{catalogada}**, una de las 4 hotspot catalogadas. "

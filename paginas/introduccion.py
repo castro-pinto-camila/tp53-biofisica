@@ -31,16 +31,40 @@ mutaciones = cargar_mutaciones()
 st.markdown(
     """
     <div class="hero-title">TP53: el gen guardián del genoma</div>
-    <div class="hero-sub">Antes de analizar mutaciones puntuales, un recorrido
-    breve por el gen y la proteína que las contiene</div>
+    <div class="hero-sub">De un cambio de una sola letra en el ADN al mecanismo
+    biofísico por el que una célula pierde su freno contra el cáncer</div>
+
+    <div class="stat-hero">
+      <span class="stat-num">~50%</span>
+      <span class="stat-txt">de todos los cánceres humanos llevan una mutación en
+      TP53 — es el gen más frecuentemente mutado en tumores. Esta app abre una de
+      esas mutaciones y muestra <b>por qué</b> rompe la proteína.</span>
+    </div>
+
+    <div class="learn-box">
+      <div class="learn-h">Qué vas a aprender</div>
+      <ul>
+        <li>Distinguir los dos mecanismos por los que una mutación abole la unión al
+            ADN: <b>defecto de contacto</b> vs. <b>defecto estructural</b>.</li>
+        <li>Leer un <b>ΔΔG</b> y entender por qué el dominio de p53 es
+            «marginalmente estable»: basta perder 1–3 kcal/mol para desplegarlo a
+            37 °C.</li>
+        <li>Comparar una heurística fisicoquímica simple contra datos <b>medidos</b>
+            y ver dónde acierta y dónde falla (rigor honesto, no caja negra).</li>
+      </ul>
+    </div>
+
     <div class="hero-note">
-      Recorre los 4 pasos para ubicar el gen en el genoma, conocer su proteína,
-      ver cómo se organiza en dominios funcionales y localizar las mutaciones
-      dentro de la secuencia completa. Datos verificados en UniProt y NCBI Gene
-      (ver fuentes al pie de cada sección).
+      <b>Empieza aquí:</b> recorre los 4 pasos de abajo (genoma → proteína →
+      dominios → secuencia y mutaciones) y termina en el evaluador. Datos
+      verificados en UniProt, NCBI Gene e IARC (fuentes al pie de cada sección).
     </div>
     """,
     unsafe_allow_html=True,
+)
+st.caption(
+    "Prevalencia de TP53 en tumores: Olivier, Hollstein & Hainaut 2010, Cold Spring "
+    "Harb Perspect Biol (doi:10.1101/cshperspect.a001008)."
 )
 
 # ---------------------------------------------------------------------------
