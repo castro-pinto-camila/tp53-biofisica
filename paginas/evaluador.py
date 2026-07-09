@@ -22,23 +22,18 @@ from biofisica import (
     fraccion_plegada,
     SCORE_MAXIMO,
 )
-from estilos import seccion
+from estilos import seccion, hero
 
 # ---------------------------------------------------------------------------
 # 1. Encabezado
 # ---------------------------------------------------------------------------
-st.markdown(
-    """
-    <div class="hero-title">Evaluador de Impacto Biofísico de Mutaciones en TP53</div>
-    <div class="hero-sub">Del genotipo al mecanismo: por qué una mutación puntual
-    altera a la proteína supresora tumoral p53</div>
-    <div class="hero-note">
-      Herramienta <b>didáctica</b> de interpretación heurística basada en principios
-      fisicoquímicos. No es un predictor clínico (SIFT / PolyPhen / AlphaMissense).
-      Datos verificados en IARC (R21, ene. 2025), ClinVar y UniProt / Pfam.
-    </div>
-    """,
-    unsafe_allow_html=True,
+hero(
+    "Evaluador de Impacto Biofísico de Mutaciones en TP53",
+    "Del genotipo al mecanismo: por qué una mutación puntual altera a la proteína "
+    "supresora tumoral p53",
+    "Herramienta <b>didáctica</b> de interpretación heurística basada en principios "
+    "fisicoquímicos. No es un predictor clínico (SIFT / PolyPhen / AlphaMissense). "
+    "Datos verificados en IARC (R21, ene. 2025), ClinVar y UniProt / Pfam.",
 )
 
 # ---------------------------------------------------------------------------

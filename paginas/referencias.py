@@ -9,7 +9,7 @@ verificados; los que no se pudieron confirmar se marcan explícitamente.
 import streamlit as st
 
 from biofisica import SCORE_MAXIMO
-from estilos import seccion
+from estilos import seccion, hero
 
 # ---------------------------------------------------------------------------
 # Contenido (curado)
@@ -133,18 +133,12 @@ REFERENCIAS = [
 # ---------------------------------------------------------------------------
 # Encabezado
 # ---------------------------------------------------------------------------
-st.markdown(
-    """
-    <div class="hero-title">Glosario y referencias</div>
-    <div class="hero-sub">Los términos clave y las fuentes que sostienen cada dato
-    de la aplicación</div>
-    <div class="hero-note">
-      Todos los datos biológicos provienen de fuentes públicas verificadas. Los DOIs
-      de esta página fueron confirmados; el único sin confirmar está marcado
-      explícitamente como «DOI por verificar».
-    </div>
-    """,
-    unsafe_allow_html=True,
+hero(
+    "Glosario y referencias",
+    "Los términos clave y las fuentes que sostienen cada dato de la aplicación",
+    "Todos los datos biológicos provienen de fuentes públicas verificadas. Los DOIs "
+    "de esta página fueron confirmados; el único sin confirmar está marcado "
+    "explícitamente como «DOI por verificar».",
 )
 
 # ---------------------------------------------------------------------------

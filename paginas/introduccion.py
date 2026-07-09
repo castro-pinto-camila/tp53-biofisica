@@ -30,15 +30,16 @@ mutaciones = cargar_mutaciones()
 # ---------------------------------------------------------------------------
 st.markdown(
     """
-    <div class="hero-title">TP53: el gen guardián del genoma</div>
-    <div class="hero-sub">De un cambio de una sola letra en el ADN al mecanismo
-    biofísico por el que una célula pierde su freno contra el cáncer</div>
-
-    <div class="stat-hero">
-      <span class="stat-num">~50%</span>
-      <span class="stat-txt">de todos los cánceres humanos llevan una mutación en
-      TP53 — es el gen más frecuentemente mutado en tumores. Esta app abre una de
-      esas mutaciones y muestra <b>por qué</b> rompe la proteína.</span>
+    <div class="hero-banner">
+      <div class="hero-title">TP53: el gen guardián del genoma</div>
+      <div class="hero-sub">De un cambio de una sola letra en el ADN al mecanismo
+      biofísico por el que una célula pierde su freno contra el cáncer</div>
+      <div class="stat-hero">
+        <span class="stat-num">~50%</span>
+        <span class="stat-txt">de todos los cánceres humanos llevan una mutación en
+        TP53 — es el gen más frecuentemente mutado en tumores. Esta app abre una de
+        esas mutaciones y muestra <b>por qué</b> rompe la proteína.</span>
+      </div>
     </div>
 
     <div class="learn-box">

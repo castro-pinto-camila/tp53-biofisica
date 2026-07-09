@@ -13,7 +13,7 @@ import random
 import streamlit as st
 
 from biofisica import cargar_mutaciones
-from estilos import seccion
+from estilos import seccion, hero
 
 mutaciones = cargar_mutaciones()
 
@@ -128,13 +128,9 @@ if "quiz_orden" not in st.session_state:
 # ---------------------------------------------------------------------------
 # Encabezado
 # ---------------------------------------------------------------------------
-st.markdown(
-    """
-    <div class="hero-title">Quiz: ¿contacto o estructural?</div>
-    <div class="hero-sub">Pon a prueba lo que entendiste sobre el mecanismo biofísico
-    de las mutaciones</div>
-    """,
-    unsafe_allow_html=True,
+hero(
+    "Quiz: ¿contacto o estructural?",
+    "Pon a prueba lo que entendiste sobre el mecanismo biofísico de las mutaciones",
 )
 
 orden = st.session_state.quiz_orden

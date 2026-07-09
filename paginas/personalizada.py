@@ -25,7 +25,7 @@ from biofisica import (
     generar_interpretacion,
     SCORE_MAXIMO,
 )
-from estilos import seccion
+from estilos import seccion, hero
 
 gen = cargar_gen()
 LARGO = gen["longitud_aa"]
@@ -33,19 +33,14 @@ LARGO = gen["longitud_aa"]
 # ---------------------------------------------------------------------------
 # Encabezado
 # ---------------------------------------------------------------------------
-st.markdown(
-    """
-    <div class="hero-title">Laboratorio de mutaciones</div>
-    <div class="hero-sub">Elige cualquier posición y cualquier sustitución: el motor
-    calcula el impacto fisicoquímico en vivo</div>
-    <div class="hero-note">
-      Esto es la parte <b>biofísica</b> del análisis, calculada para cualquier mutación.
-      Para posiciones fuera de las 4 hotspot catalogadas <b>no hay datos clínicos ni ΔΔG
-      medido</b>: solo el cambio fisicoquímico y el índice heurístico, que es orientativo
-      y no un predictor.
-    </div>
-    """,
-    unsafe_allow_html=True,
+hero(
+    "Laboratorio de mutaciones",
+    "Elige cualquier posición y cualquier sustitución: el motor calcula el impacto "
+    "fisicoquímico en vivo",
+    "Esto es la parte <b>biofísica</b> del análisis, calculada para cualquier "
+    "mutación. Para posiciones fuera de las 4 hotspot catalogadas <b>no hay datos "
+    "clínicos ni ΔΔG medido</b>: solo el cambio fisicoquímico y el índice heurístico, "
+    "que es orientativo y no un predictor.",
 )
 
 # ---------------------------------------------------------------------------

@@ -18,6 +18,7 @@ _CSS = """
   :root {
     /* --- Paleta (modo claro) --- */
     --navy:        #1f3a5f;   /* primario: títulos, encabezados            */
+    --heading:     #1f3a5f;   /* títulos grandes (hero) — muy contrastado   */
     --navy-2:      #33465c;   /* texto secundario fuerte                    */
     --brick:       #a23b3b;   /* acento cálido: aumento / contacto / alerta */
     --teal:        #2c6b8f;   /* acento frío: disminución / estructura      */
@@ -39,32 +40,45 @@ _CSS = """
     --sans:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --mono:  'SFMono-Regular', 'Cascadia Code', 'Courier New', monospace;
 
+    /* --- Gradiente de cabecera (banner hero) --- */
+    --hero-a: #1f3a5f;   /* navy profundo */
+    --hero-b: #2c6b8f;   /* teal          */
+    --hero-c: #7a2f3a;   /* acento ladrillo para el borde inferior */
+
     /* --- Espaciado y forma --- */
     --radius:   8px;
     --radius-sm: 5px;
-    --shadow:  0 1px 2px rgba(31,58,95,0.04), 0 2px 8px rgba(31,58,95,0.05);
+    --radius-lg: 16px;
+    --shadow:  0 1px 2px rgba(31,58,95,0.05), 0 4px 14px rgba(31,58,95,0.07);
+    --shadow-lg: 0 6px 24px rgba(31,58,95,0.12);
   }
 
   /* --- Modo oscuro: se redefinen SOLO los tokens; el resto hereda --- */
   @media (prefers-color-scheme: dark) {
     :root {
-      --navy:        #9dc0e6;
-      --navy-2:      #b9c7d6;
-      --brick:       #e08a8a;
-      --teal:        #7fb8d4;
-      --gold:        #d8b45a;
-      --green:       #7cc79a;
+      --navy:        #a9caee;
+      --heading:     #e7f0fb;
+      --navy-2:      #c4d2e0;
+      --brick:       #e79a9a;
+      --teal:        #86bcd8;
+      --gold:        #ddba64;
+      --green:       #85cfa2;
 
       --ink:         #e8ecf1;
       --ink-soft:    #aeb8c4;
       --ink-faint:   #8a94a0;
 
-      --surface:     #1a2230;
-      --bg-soft:     #161c27;
-      --bg-inset:    #222c3a;
-      --border:      #33404f;
-      --border-soft: #2a3542;
-      --shadow:      0 1px 2px rgba(0,0,0,0.25), 0 2px 10px rgba(0,0,0,0.30);
+      --surface:     #232e40;
+      --bg-soft:     #1c2534;
+      --bg-inset:    #2a3648;
+      --border:      #3a4759;
+      --border-soft: #303c4c;
+      --shadow:      0 1px 2px rgba(0,0,0,0.20), 0 4px 16px rgba(0,0,0,0.30);
+      --shadow-lg:   0 8px 30px rgba(0,0,0,0.42);
+
+      --hero-a: #16283f;
+      --hero-b: #1b4a5f;
+      --hero-c: #6a2b34;
     }
   }
 
@@ -73,67 +87,105 @@ _CSS = """
   .block-container p, .block-container li, .kv, .acard-note,
   .callout, .tabla-comp, .tag { font-family: var(--sans); }
 
-  /* Encabezado */
+  /* --- Cabecera con gradiente (banner hero) --- */
+  .hero-banner {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--hero-a) 0%, var(--hero-b) 100%);
+      border-radius: var(--radius-lg);
+      border-bottom: 3px solid var(--hero-c);
+      padding: 1.7rem 1.9rem; margin: 0.2rem 0 1.1rem;
+      box-shadow: var(--shadow-lg);
+  }
+  /* Hélice de ADN decorativa (SVG data-uri en una sola línea), tenue, a la derecha */
+  .hero-banner::after {
+      content: ""; position: absolute; top: -20px; right: -10px;
+      width: 240px; height: 240px; opacity: 0.20; pointer-events: none;
+      background-repeat: no-repeat; background-position: center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='white' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M85 10 C150 45 150 85 85 120 C20 155 20 195 85 230'/%3E%3Cpath d='M155 10 C90 45 90 85 155 120 C220 155 220 195 155 230'/%3E%3Cline x1='96' y1='28' x2='144' y2='28'/%3E%3Cline x1='108' y1='45' x2='132' y2='45'/%3E%3Cline x1='108' y1='85' x2='132' y2='85'/%3E%3Cline x1='96' y1='102' x2='144' y2='102'/%3E%3Cline x1='96' y1='138' x2='144' y2='138'/%3E%3Cline x1='108' y1='155' x2='132' y2='155'/%3E%3Cline x1='108' y1='195' x2='132' y2='195'/%3E%3Cline x1='96' y1='212' x2='144' y2='212'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-banner > * { position: relative; z-index: 1; }
+
   .hero-title {
       font-family: var(--serif);
-      font-size: 2.15rem; font-weight: 700; color: var(--navy);
-      line-height: 1.18; margin-bottom: 0.25rem; letter-spacing: -0.01em;
+      font-size: 2.2rem; font-weight: 700; color: var(--heading);
+      line-height: 1.2; margin-bottom: 0.3rem;
   }
+  .hero-banner .hero-title { color: #ffffff; }
   .hero-sub {
       font-family: var(--serif); font-size: 1.1rem; font-style: italic;
-      color: var(--ink-soft); margin-bottom: 0.7rem;
+      color: var(--ink-soft); margin-bottom: 0.6rem; max-width: 64ch;
   }
+  .hero-banner .hero-sub { color: rgba(255,255,255,0.86); }
   .hero-note {
-      font-family: var(--sans); font-size: 0.88rem; color: var(--ink-faint);
+      font-family: var(--sans); font-size: 0.88rem; color: var(--ink-soft);
       border-left: 3px solid var(--teal);
-      padding: 0.5rem 0.9rem; background: var(--bg-soft);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 0.15rem 0 0.15rem 0.9rem; background: transparent;
+      margin: 0.5rem 0 0;
   }
+  .hero-note b { color: var(--navy); }
+  .hero-banner .hero-note {
+      color: rgba(255,255,255,0.82); border-left-color: rgba(255,255,255,0.45);
+  }
+  .hero-banner .hero-note b { color: #ffffff; }
 
-  /* Encabezados de sección */
+  /* Encabezados de sección (con acento lateral en gradiente) */
   .section-h {
       font-family: var(--serif); font-size: 1.3rem; font-weight: 600;
       color: var(--navy); border-bottom: 1px solid var(--border);
-      padding-bottom: 0.3rem; margin: 1.7rem 0 0.9rem;
+      padding-bottom: 0.35rem; margin: 1.8rem 0 0.9rem;
+      display: flex; align-items: center; gap: 0.55rem;
+  }
+  .section-h::before {
+      content: ""; display: inline-block; width: 6px; height: 1.05em;
+      border-radius: 3px; flex: none;
+      background: linear-gradient(180deg, var(--teal), var(--brick));
   }
 
   /* --- Recuadro "qué vas a aprender" (objetivos de aprendizaje) --- */
+  /* Fondo teñido con el acento ámbar (color-mix) en vez de una losa opaca: se
+     lee como panel, no como bloque negro en modo oscuro. */
   .learn-box {
       border: 1px solid var(--border); border-left: 4px solid var(--gold);
-      border-radius: var(--radius); background: var(--surface);
-      padding: 1rem 1.2rem; margin: 0.6rem 0 0.4rem; box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--gold) 8%, var(--surface));
+      padding: 0.9rem 1.2rem; margin: 1rem 0 0.6rem;
   }
   .learn-box .learn-h {
-      font-family: var(--serif); font-weight: 700; color: var(--navy);
-      font-size: 1.02rem; margin-bottom: 0.5rem;
+      font-family: var(--serif); font-weight: 700; color: var(--heading);
+      font-size: 1.05rem; margin-bottom: 0.5rem;
   }
   .learn-box ul { margin: 0; padding-left: 1.1rem; }
   .learn-box li { font-family: var(--sans); font-size: 0.92rem;
-                  color: var(--ink); margin: 0.28rem 0; }
+                  color: var(--ink); margin: 0.34rem 0; line-height: 1.45; }
 
-  /* --- Cifra de impacto (hero stat) --- */
+  /* --- Cifra de impacto (dentro del banner): número grande + texto --- */
   .stat-hero {
-      display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;
-      background: var(--bg-soft); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 0.8rem 1.1rem; margin: 0.5rem 0 0.3rem;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      margin: 0.9rem 0 0.1rem; padding-top: 0.9rem;
+      border-top: 1px solid rgba(255,255,255,0.18);
   }
   .stat-hero .stat-num {
-      font-family: var(--serif); font-weight: 700; color: var(--brick);
-      font-size: 2rem; line-height: 1;
+      font-family: var(--serif); font-weight: 700;
+      color: #ffd9a8; font-size: 2.9rem; line-height: 1;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.25);
   }
-  .stat-hero .stat-txt { font-family: var(--sans); color: var(--ink-soft);
-                         font-size: 0.95rem; }
+  .stat-hero .stat-txt { font-family: var(--sans); color: rgba(255,255,255,0.9);
+                         font-size: 0.96rem; line-height: 1.5; flex: 1 1 300px; }
+  .stat-hero .stat-txt b { color: #ffffff; }
 
-  /* Tarjetas */
+  /* Tarjetas (con acento superior y elevación al pasar el cursor) */
   .acard {
-      border: 1px solid var(--border); border-radius: var(--radius);
+      position: relative; border: 1px solid var(--border);
+      border-radius: var(--radius); border-top: 3px solid var(--teal);
       padding: 1rem 1.15rem; background: var(--surface); min-height: 210px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow); transition: transform 0.14s ease, box-shadow 0.14s ease;
   }
+  .acard:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
   .acard-h {
-      font-family: var(--serif); font-size: 1.02rem; font-weight: 600;
-      color: var(--navy); border-bottom: 2px solid var(--border-soft);
-      padding-bottom: 0.4rem; margin-bottom: 0.6rem;
+      font-family: var(--serif); font-size: 1.05rem; font-weight: 600;
+      color: var(--navy); padding-bottom: 0.45rem; margin-bottom: 0.6rem;
+      border-bottom: 2px solid transparent;
+      border-image: linear-gradient(90deg, var(--teal), transparent) 1;
   }
   .kv { display: flex; justify-content: space-between; gap: 0.5rem;
         padding: 0.22rem 0; font-size: 0.92rem; border-bottom: 1px dotted var(--border-soft); }
@@ -218,3 +270,19 @@ def aplicar_estilo():
 
 def seccion(titulo):
     st.markdown(f'<div class="section-h">{titulo}</div>', unsafe_allow_html=True)
+
+
+def hero(titulo, subtitulo, nota=None):
+    """Cabecera con gradiente (banner hero) reutilizable en todas las páginas.
+
+    Se emite en una sola línea de HTML: st.markdown interpreta el HTML indentado
+    como bloque de código, así que evitamos saltos de línea con sangría.
+    """
+    nota_html = f'<div class="hero-note">{nota}</div>' if nota else ""
+    st.markdown(
+        f'<div class="hero-banner">'
+        f'<div class="hero-title">{titulo}</div>'
+        f'<div class="hero-sub">{subtitulo}</div>'
+        f'{nota_html}</div>',
+        unsafe_allow_html=True,
+    )

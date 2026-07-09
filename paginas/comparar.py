@@ -13,7 +13,7 @@ import streamlit as st
 from plotly.subplots import make_subplots
 
 from biofisica import cargar_mutaciones, interpretar_mutacion, SCORE_MAXIMO
-from estilos import seccion
+from estilos import seccion, hero
 
 mutaciones = cargar_mutaciones()
 opciones = list(mutaciones.keys())
@@ -32,19 +32,14 @@ COLORES_MUT = {
 # ---------------------------------------------------------------------------
 # Encabezado
 # ---------------------------------------------------------------------------
-st.markdown(
-    """
-    <div class="hero-title">Comparación de mutaciones</div>
-    <div class="hero-sub">Las 4 mutaciones lado a lado: cambios fisicoquímicos,
-    índice de impacto y tipos de cáncer asociados</div>
-    <div class="hero-note">
-      Esta página junta lo que ya viste mutación por mutación en el evaluador.
-      La comparación de tipos de cáncer es <b>descriptiva</b> (co-ocurrencia
-      registrada en IARC): no implica que el cambio fisicoquímico
-      <i>cause</i> un tipo de cáncer en particular.
-    </div>
-    """,
-    unsafe_allow_html=True,
+hero(
+    "Comparación de mutaciones",
+    "Las 4 mutaciones lado a lado: cambios fisicoquímicos, índice de impacto y "
+    "tipos de cáncer asociados",
+    "Esta página junta lo que ya viste mutación por mutación en el evaluador. La "
+    "comparación de tipos de cáncer es <b>descriptiva</b> (co-ocurrencia registrada "
+    "en IARC): no implica que el cambio fisicoquímico <i>cause</i> un tipo de cáncer "
+    "en particular.",
 )
 
 # ---------------------------------------------------------------------------
