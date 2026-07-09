@@ -19,6 +19,7 @@ import streamlit.components.v1 as components
 from biofisica import cargar_gen, cargar_dominios, cargar_mutaciones
 from estilos import seccion
 from diagrama import SVG_DOGMA_CENTRAL
+from grafo import construir_grafo
 
 gen = cargar_gen()
 dominios = cargar_dominios()
@@ -295,6 +296,47 @@ elif paso == 3:
                 """,
                 unsafe_allow_html=True,
             )
+
+    # --- ¿De dónde vienen estas mutaciones? ---
+    st.markdown("##### ¿De dónde vienen estas mutaciones?")
+    st.markdown(
+        "La **mayoría** de las mutaciones en TP53 son **somáticas**: surgen durante la "
+        "vida en una célula concreta y **no se heredan**. Una **minoría** son "
+        "**germinales** (heredadas) y causan el **síndrome de Li-Fraumeni** — las 4 "
+        "mutaciones de esta app aparecen en ambos casos. Muchos de los puntos calientes "
+        "más frecuentes (R175, R248, R282) mutan tanto por un proceso **interno**: la "
+        "citosina metilada de los sitios «CpG» se transforma sola, sin necesidad de un "
+        "agente externo. En cambio, otras mutaciones de TP53 llevan la **firma de "
+        "agentes ambientales**: la luz **UV** en cáncer de piel, el **tabaco** en "
+        "pulmón, o la **aflatoxina** (un hongo de alimentos mal conservados) en cáncer "
+        "de hígado."
+    )
+    st.caption(
+        "Fuentes: Olivier, Hollstein & Hainaut 2010, Cold Spring Harb Perspect Biol "
+        "(doi:10.1101/cshperspect.a001008); Baugh et al. 2018, Cell Death Differ "
+        "(doi:10.1038/cdd.2017.180)."
+    )
+
+    # --- Red de mutaciones y tipos de cáncer (vista general de las 4) ---
+    st.markdown("##### Red de mutaciones y tipos de cáncer")
+    st.caption(
+        "Nodos rojos: mutaciones. Nodos azules: tipos de cáncer (columna Topography de "
+        "IARC). **Haz clic en un tipo de cáncer** para abrir su página explicativa en "
+        "cancer.gov (Instituto Nacional del Cáncer, en español). Arrastra los nodos para "
+        "reorganizar la red; usa los botones de la esquina inferior izquierda para "
+        "acercar, alejar o volver a la vista original."
+    )
+    try:
+        _ruta_grafo = construir_grafo()
+        with open(_ruta_grafo, "r", encoding="utf-8") as _f:
+            _html_grafo = _f.read()
+        components.html(_html_grafo, height=670, scrolling=True)
+        try:
+            os.remove(_ruta_grafo)
+        except OSError:
+            pass
+    except Exception as _exc:  # noqa: BLE001
+        st.info("No se pudo renderizar el grafo. Detalle: %s" % _exc)
 
     st.markdown("<br>", unsafe_allow_html=True)
     _, col_boton, _ = st.columns([1, 1.4, 1])

@@ -7,8 +7,6 @@ por el que una mutación altera la función de p53. No es un predictor clínico
 (SIFT / PolyPhen / AlphaMissense).
 """
 
-import os
-
 import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
@@ -24,7 +22,6 @@ from biofisica import (
     fraccion_plegada,
     SCORE_MAXIMO,
 )
-from grafo import construir_grafo
 from estilos import seccion
 
 # ---------------------------------------------------------------------------
@@ -392,30 +389,9 @@ for titulo, texto in generar_implicancias(r):
         st.write(texto)
 
 # ---------------------------------------------------------------------------
-# 8. Red de mutaciones y tipos de cáncer
-# ---------------------------------------------------------------------------
-seccion("Red de mutaciones y tipos de cáncer")
-st.caption(
-    "Nodos rojos: mutaciones. Nodos azules: tipos de cáncer (columna Topography de "
-    "IARC). **Haz clic en un tipo de cáncer** para abrir su página explicativa en "
-    "cancer.gov (Instituto Nacional del Cáncer, en español). Arrastra los nodos para "
-    "reorganizar la red; usa los botones de la esquina inferior izquierda para "
-    "acercar, alejar o volver a la vista original."
-)
-try:
-    ruta_grafo = construir_grafo()
-    with open(ruta_grafo, "r", encoding="utf-8") as f:
-        html_grafo = f.read()
-    components.html(html_grafo, height=670, scrolling=True)
-    try:
-        os.remove(ruta_grafo)
-    except OSError:
-        pass
-except Exception as exc:  # noqa: BLE001
-    st.info("No se pudo renderizar el grafo (¿está instalado pyvis?). Detalle: %s" % exc)
-
-# ---------------------------------------------------------------------------
-# 9. Visualización 3D interactiva (3Dmol.js sobre la estructura 1TUP)
+# 8. Visualización 3D interactiva (3Dmol.js sobre la estructura 1TUP)
+#    (El grafo de mutaciones ↔ cáncer se movió a la página "El gen TP53",
+#     paso 4, porque es una vista general de las 4, no de una sola mutación.)
 # ---------------------------------------------------------------------------
 seccion("Estructura tridimensional — proteína sana (tipo salvaje)")
 
