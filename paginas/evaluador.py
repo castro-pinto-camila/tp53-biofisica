@@ -219,6 +219,9 @@ card_clin = f"""
   <div class="kv"><span>Casos en IARC</span><b>{r['casos_iarc']}</b></div>
   <div class="kv"><span>ClinVar germinal</span><b>{r['clinvar_germinal']}</b></div>
   <div class="kv"><span>ClinVar somático</span><b>{r.get('clinvar_somatico', 'por verificar')}</b></div>
+  <div class="acard-note">Las clasificaciones de ClinVar varían en nivel de revisión
+  (número de envíos, estrellas); no se muestran aquí como veredicto clínico
+  definitivo.</div>
 </div>
 """
 

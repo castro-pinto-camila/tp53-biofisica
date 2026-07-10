@@ -37,17 +37,20 @@ GLOSARIO = [
      "pero sostiene la estructura sin la cual no hay unión."),
     ("Kd (constante de disociación)",
      "Concentración a la que la mitad de la proteína está unida al ADN. Menor Kd = "
-     "mayor afinidad. El tipo salvaje ≈ 7 nM."),
+     "mayor afinidad. El tipo salvaje se reporta en un rango ~5–10 nM según el "
+     "elemento de respuesta de ADN usado en el ensayo (no un valor único)."),
     ("ΔΔG",
      "Cuánto desestabiliza una mutación el plegamiento, en kcal/mol, respecto al tipo "
-     "salvaje. Mayor ΔΔG = pliegue más débil."),
+     "salvaje. Convención: ΔΔG > 0 = mutante MENOS estable (mutante − silvestre). "
+     "Mayor ΔΔG = pliegue más débil."),
     ("Tm (temperatura de fusión)",
      "Temperatura a la que la mitad de la proteína está desplegada. El DBD de p53 "
-     "tiene Tm ≈ 43 °C, apenas por encima de los 37 °C corporales."),
+     "tiene Tm ≈ 42.9 °C (medida por fluorimetría de barrido diferencial, Life 2023, "
+     "13:31), apenas por encima de los 37 °C corporales."),
     ("Hidrofobicidad (escala Kyte–Doolittle)",
      "Tendencia de un aminoácido a evitar el agua. Valores altos = más hidrofóbico."),
     ("Volumen molecular (escala Zamyatnin)",
-     "Tamaño del aminoácido en ų; cambios grandes causan choques estéricos o cavidades."),
+     "Tamaño del aminoácido en Å³; cambios grandes causan choques estéricos o cavidades."),
     ("Polaridad",
      "Si la cadena lateral es polar (interactúa con agua y cargas) o no polar."),
     ("Conservación evolutiva",
@@ -67,16 +70,18 @@ GLOSARIO = [
     ("AlphaMissense / SIFT / PolyPhen",
      "Predictores computacionales de patogenicidad de variantes; AlphaMissense usa "
      "aprendizaje profundo."),
-    ("IARC / ClinVar / UniProt / Pfam",
+    ("NCI TP53 (antes IARC) / ClinVar / UniProt / Pfam",
      "Bases de datos públicas de mutaciones tumorales, variantes clínicas, "
-     "secuencias/proteínas y dominios, respectivamente."),
+     "secuencias/proteínas y dominios, respectivamente. La base de mutaciones "
+     "tumorales de TP53 se administraba antes en el IARC y hoy la aloja el NCI."),
 ]
 
 # (categoría, cita, doi_o_None, url_o_None)
 REFERENCIAS = [
     ("Bases de datos y fuentes de datos",
-     "IARC TP53 Database (versión R21, enero 2025). Base de datos de mutaciones "
-     "somáticas y germinales de TP53.", None, "https://tp53.isb-cgc.org/"),
+     "NCI TP53 Database (anteriormente IARC TP53 Database), versión R21, enero 2025. "
+     "Base de datos de mutaciones somáticas y germinales de TP53.", None,
+     "http://tp53.cancer.gov/"),
     ("Bases de datos y fuentes de datos",
      "ClinVar (NCBI). Archivo de relaciones entre variantes y fenotipos.", None,
      "https://www.ncbi.nlm.nih.gov/clinvar/"),
@@ -109,7 +114,8 @@ REFERENCIAS = [
      "10.3390/life13010031", None),
     ("Estabilidad termodinámica (ΔΔG, Tm)",
      "Joerger AC, Fersht AR (2008). Structural biology of the tumor suppressor p53. "
-     "Annu Rev Biochem 77:557–582 (revisión).", None, None),
+     "Annu Rev Biochem 77:557–582 (revisión).",
+     "10.1146/annurev.biochem.77.060806.091238", None),
     ("Estabilidad termodinámica (ΔΔG, Tm)",
      "Boeckler FM, Joerger AC, Jaggi G, Rutherford TJ, Veprintsev DB, Fersht AR (2008). "
      "Targeted rescue of a destabilized mutant of p53 by an in silico screened drug "
@@ -132,11 +138,27 @@ REFERENCIAS = [
      "Cheng J et al. (2023). Accurate proteome-wide missense variant effect "
      "prediction with AlphaMissense. Science 381:eadg7492.", "10.1126/science.adg7492",
      None),
+    ("Predictores de patogenicidad",
+     "Ng PC, Henikoff S (2003). SIFT: predicting amino acid changes that affect "
+     "protein function. Nucleic Acids Res 31:3812–3814.", "10.1093/nar/gkg509", None),
+    ("Predictores de patogenicidad",
+     "Adzhubei IA et al. (2010). A method and server for predicting damaging "
+     "missense mutations (PolyPhen-2). Nature Methods 7:248–249.",
+     "10.1038/nmeth0410-248", None),
 
     ("Unión al ADN y dependencia de temperatura",
-     "Barakat K et al. (2011); datos de microarray de unión al ADN de p53 y "
-     "comportamiento dependiente de temperatura de R248W. (DOI por verificar.)",
-     None, None),
+     "Friedlander P, Legros Y, Soussi T, Prives C (1996). Regulation of mutant p53 "
+     "temperature-sensitive DNA binding. J Biol Chem 271:25468–25478.",
+     "10.1074/jbc.271.41.25468", None),
+
+    ("Síndromes hereditarios y ganancia/pérdida de función",
+     "Li FP, Fraumeni JF Jr (1969). Soft-tissue sarcomas, breast cancer, and other "
+     "neoplasms: a familial syndrome? Ann Intern Med 71:747–752.",
+     "10.7326/0003-4819-71-4-747", None),
+    ("Síndromes hereditarios y ganancia/pérdida de función",
+     "Muller PAJ, Vousden KH (2014). Mutant p53 in cancer: new functions and "
+     "therapeutic opportunities. Cancer Cell 25:304–317 (efecto dominante negativo "
+     "y ganancia de función).", "10.1016/j.ccr.2014.01.021", None),
 ]
 
 # ---------------------------------------------------------------------------
@@ -145,9 +167,8 @@ REFERENCIAS = [
 hero(
     "Glosario y referencias",
     "Los términos clave y las fuentes que sostienen cada dato de la aplicación",
-    "Todos los datos biológicos provienen de fuentes públicas verificadas. Los DOIs "
-    "de esta página fueron confirmados; el único sin confirmar está marcado "
-    "explícitamente como «DOI por verificar».",
+    "Todos los datos biológicos provienen de fuentes públicas verificadas. Todos los "
+    "DOIs de esta página fueron confirmados directamente en CrossRef.",
 )
 
 # ---------------------------------------------------------------------------

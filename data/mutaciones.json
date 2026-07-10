@@ -50,7 +50,7 @@
       "clasificacion": "contact",
       "kd_wt": "~7 nM (tipo salvaje)",
       "efecto_mutante": "Contacto directo con el ADN. Kd 2-7x mayor que el tipo salvaje. Muestra dependencia de temperatura documentada: une a bajas temperaturas y pierde la unión a temperatura fisiológica.",
-      "referencia": "Barakat et al. 2011; datos de microarray de unión al ADN de p53."
+      "referencia": "Friedlander P, Legros Y, Soussi T, Prives C (1996), J Biol Chem 271:25468-25478 (doi:10.1074/jbc.271.41.25468)."
     },
     "estabilidad": {
       "ddG_kcal_mol": 2.0,
@@ -67,7 +67,7 @@
       "une_por_debajo_de_celsius": 33,
       "no_une_a_celsius": 37,
       "explicacion": "Su Tm (39.3 °C) está apenas por encima de la temperatura corporal. A ~25-33 °C (298-306 K) el dominio se pliega y une el ADN; a 37 °C (310 K) está mayormente desplegado y pierde la unión, pese a que la cadena lateral de contacto solo fue sustituida.",
-      "fuente": "Barakat et al. 2011; comportamiento de unión dependiente de temperatura de p53(R248W)."
+      "fuente": "Friedlander P, Legros Y, Soussi T, Prives C (1996), J Biol Chem 271:25468-25478 (doi:10.1074/jbc.271.41.25468); comportamiento de unión dependiente de temperatura de p53(R248W)."
     },
     "canceres": ["Mama", "Esófago", "Cerebro", "Colon", "Pulmón"]
   },
