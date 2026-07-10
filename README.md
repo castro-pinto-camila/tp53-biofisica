@@ -144,9 +144,12 @@ confirmados uno por uno.
 Boeckler et al. 2008) y ΔTm medido (-9.0 °C, Mavridi et al. 2026) verificados
 contra fuentes primarias; su Tm absoluto (33.9 °C) es una **aproximacion**
 que combina ese ΔTm con el Tm del tipo salvaje de otro estudio (Life 2023),
-declarado explicitamente en `tm_fuente`. Sus casos IARC exactos y su efecto
-dominante negativo no se pudieron verificar contra la base de datos actual
-(quedo interactiva, no consultable por fetch automatizado) y se marcan
-`por verificar` en vez de inventarse.
+declarado explicitamente en `tm_fuente`. Su efecto dominante negativo se
+clasifico como **moderado** con base en Boettcher et al. 2019 (Science
+365:599-604), que probo Y220C directamente y hallo union al ADN residual (DNE
+presente pero de menor potencia que R175H/R248Q/R273H). Sus casos IARC exactos
+no se pudieron verificar contra la base de datos actual (quedo interactiva, no
+consultable por fetch automatizado) y se marcan `por verificar` en vez de
+inventarse.
 
 *Fecha de la ultima actualizacion de datos: 2026-07-09.*

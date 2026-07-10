@@ -159,6 +159,12 @@ REFERENCIAS = [
      "Muller PAJ, Vousden KH (2014). Mutant p53 in cancer: new functions and "
      "therapeutic opportunities. Cancer Cell 25:304–317 (efecto dominante negativo "
      "y ganancia de función).", "10.1016/j.ccr.2014.01.021", None),
+    ("Síndromes hereditarios y ganancia/pérdida de función",
+     "Boettcher S et al. (2019). A dominant-negative effect drives selection of TP53 "
+     "missense mutations in myeloid malignancies. Science 365:599–604 (los variantes "
+     "missense del dominio de unión al ADN, incluida Y220C, ejercen efecto dominante "
+     "negativo; Y220C con unión al ADN residual, DNE de menor potencia).",
+     "10.1126/science.aax3649", None),
 ]
 
 # ---------------------------------------------------------------------------
