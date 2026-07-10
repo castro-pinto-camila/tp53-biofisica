@@ -4,7 +4,7 @@ Página: Laboratorio de mutaciones (mutación personalizada).
 
 Permite elegir CUALQUIER posición de p53 y CUALQUIER aminoácido de sustitución;
 el motor calcula en vivo los cambios fisicoquímicos y el índice heurístico. Para
-posiciones fuera de las 4 hotspot catalogadas NO hay datos clínicos ni ΔΔG medido:
+posiciones fuera de las hotspot catalogadas NO hay datos clínicos ni ΔΔG medido:
 se muestra únicamente el análisis fisicoquímico, claramente rotulado.
 """
 
@@ -29,6 +29,7 @@ from estilos import seccion, hero
 
 gen = cargar_gen()
 LARGO = gen["longitud_aa"]
+N_HOTSPOT = len(cargar_mutaciones())
 
 # ---------------------------------------------------------------------------
 # Encabezado
@@ -38,9 +39,9 @@ hero(
     "Elige cualquier posición y cualquier sustitución: el motor calcula el impacto "
     "fisicoquímico en vivo",
     "Esto es la parte <b>biofísica</b> del análisis, calculada para cualquier "
-    "mutación. Para posiciones fuera de las 4 hotspot catalogadas <b>no hay datos "
-    "clínicos ni ΔΔG medido</b>: solo el cambio fisicoquímico y el índice heurístico, "
-    "que es orientativo y no un predictor.",
+    f"mutación. Para posiciones fuera de las {N_HOTSPOT} hotspot catalogadas <b>no "
+    "hay datos clínicos ni ΔΔG medido</b>: solo el cambio fisicoquímico y el índice "
+    "heurístico, que es orientativo y no un predictor.",
 )
 
 # ---------------------------------------------------------------------------
@@ -140,7 +141,7 @@ if aa_mut == aa_orig:
 catalogada = mutacion_catalogada(posicion, aa_mut)
 
 # El flag `conservado` es una propiedad de la POSICIÓN, no de la sustitución.
-# Solo lo tenemos curado para las 4 hotspot: si la mutación elegida coincide con
+# Solo lo tenemos curado para las hotspot: si la mutación elegida coincide con
 # una de ellas, usamos su valor real para que el score sea IDÉNTICO al del
 # Evaluador (antes el Laboratorio fijaba conservado=False y daba un score
 # distinto para la misma mutación). Para posiciones sin dato, queda False y se
@@ -154,7 +155,8 @@ cambios = calcular_cambios(aa_orig, aa_mut)
 nivel, score = calcular_impacto(cambios, dom_clave, conservado=conservado)
 if catalogada:
     st.success(
-        f"Esta mutación coincide con **{catalogada}**, una de las 4 hotspot catalogadas. "
+        f"Esta mutación coincide con **{catalogada}**, una de las {N_HOTSPOT} hotspot "
+        f"catalogadas. "
         f"En la página «Evaluador de mutaciones» encontrarás su evidencia clínica, ΔΔG "
         f"medido y mecanismo verificados."
     )

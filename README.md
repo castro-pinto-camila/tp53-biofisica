@@ -16,7 +16,7 @@ del pliegue y consecuencias estructurales.
 ```
 BIOFISICA/
 ├── data/
-│   ├── mutaciones.json   # 4 mutaciones hotspot verificadas (R175H, R248W, G245S, R282W)
+│   ├── mutaciones.json   # 5 mutaciones hotspot verificadas (R175H, R248W, G245S, R282W, Y220C)
 │   │                     #   incluye ΔΔG, Tm, dependencia de temperatura, clase AlphaMissense
 │   ├── dominios.json     # 3 dominios funcionales verificados
 │   ├── gen_tp53.json     # gen/proteina: cromosoma, secuencia (UniProt), estabilidad WT
@@ -26,7 +26,7 @@ BIOFISICA/
 ├── paginas/
 │   ├── introduccion.py   # 1. explorador del gen (cromosoma / dominios / secuencia)
 │   ├── evaluador.py      # 2. evaluador de una mutacion (analisis completo)
-│   ├── comparar.py       # 3. comparar las 4 mutaciones lado a lado
+│   ├── comparar.py       # 3. comparar las mutaciones lado a lado
 │   ├── personalizada.py  # 4. laboratorio: cualquier posicion / aminoacido
 │   ├── quiz.py           # 5. quiz "¿contacto o estructural?"
 │   └── referencias.py    # 6. glosario y referencias con DOIs
@@ -73,7 +73,7 @@ py -c "import json; json.load(open('data/mutaciones.json', encoding='utf-8')); p
 
 1. **El gen TP53** — recorrido guiado en 4 pasos: ubicacion cromosomica (17p13.1),
    ficha del gen/proteina, mapa de dominios funcionales, y la secuencia completa
-   (393 aa, UniProt P04637) con las 4 mutaciones resaltadas.
+   (393 aa, UniProt P04637) con las mutaciones resaltadas.
 2. **Evaluador de mutaciones** — para la mutacion elegida: cambios fisicoquimicos,
    indice heuristico, mecanismo contacto/estructural, **ΔΔG de plegamiento**,
    **curva de estabilidad frente a la temperatura**, **visor 3D interactivo**,
@@ -136,8 +136,17 @@ aproximado / limite inferior) y su fuente.
 La secuencia de aminoacidos y la ubicacion cromosomica (`data/gen_tp53.json`) se
 obtuvieron directamente de UniProt (`rest.uniprot.org/uniprotkb/P04637.fasta`) y
 de NCBI Gene (`eutils.ncbi.nlm.nih.gov`, Gene ID 7157), y se verifico que las
-posiciones 175, 245, 248 y 282 coinciden exactamente con los aminoacidos
+posiciones 175, 220, 245, 248 y 282 coinciden exactamente con los aminoacidos
 originales de `mutaciones.json`. Los DOIs de la pagina de referencias fueron
 confirmados uno por uno.
 
-*Fecha de la ultima actualizacion de datos: 2026-07-08.*
+**Y220C** (5ª mutacion, agregada el 2026-07-09) tiene ΔΔG medido (4.0 kcal/mol,
+Boeckler et al. 2008) y ΔTm medido (-9.0 °C, Mavridi et al. 2026) verificados
+contra fuentes primarias; su Tm absoluto (33.9 °C) es una **aproximacion**
+que combina ese ΔTm con el Tm del tipo salvaje de otro estudio (Life 2023),
+declarado explicitamente en `tm_fuente`. Sus casos IARC exactos y su efecto
+dominante negativo no se pudieron verificar contra la base de datos actual
+(quedo interactiva, no consultable por fetch automatizado) y se marcan
+`por verificar` en vez de inventarse.
+
+*Fecha de la ultima actualizacion de datos: 2026-07-09.*

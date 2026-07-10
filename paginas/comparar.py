@@ -2,7 +2,7 @@
 """
 Página: Comparar mutaciones.
 
-Pone lado a lado las 4 mutaciones ya analizadas individualmente en el evaluador:
+Pone lado a lado las mutaciones ya analizadas individualmente en el evaluador:
 cambios fisicoquímicos, índice de impacto y tipos de cáncer asociados. La
 comparación de cáncer es descriptiva (co-ocurrencia registrada en IARC) — no se
 afirma una relación causal entre el cambio fisicoquímico y el tipo de cáncer.
@@ -18,24 +18,30 @@ from estilos import seccion, hero
 mutaciones = cargar_mutaciones()
 opciones = list(mutaciones.keys())
 resultados = {nombre: interpretar_mutacion(nombre) for nombre in opciones}
+N_MUT = len(opciones)
 
 # Un color fijo por mutación, reutilizado en TODAS las secciones de esta
 # página (gráfico, tabla y mapa de calor) para poder seguir cada mutación de
-# un vistazo.
+# un vistazo. Si se agrega una mutación nueva que no esté en este dict, cae
+# en el color gris de _COLOR_MUT_DEFECTO (ver más abajo) en vez de fallar.
 COLORES_MUT = {
     "R175H": "#1f3a5f",
     "R248W": "#a23b3b",
     "G245S": "#2c6b8f",
     "R282W": "#8a6a12",
+    "Y220C": "#6b4c7a",
 }
+_COLOR_MUT_DEFECTO = "#6a7480"
+for _nombre_mut in opciones:
+    COLORES_MUT.setdefault(_nombre_mut, _COLOR_MUT_DEFECTO)
 
 # ---------------------------------------------------------------------------
 # Encabezado
 # ---------------------------------------------------------------------------
 hero(
     "Comparación de mutaciones",
-    "Las 4 mutaciones lado a lado: cambios fisicoquímicos, índice de impacto y "
-    "tipos de cáncer asociados",
+    f"Las {N_MUT} mutaciones lado a lado: cambios fisicoquímicos, índice de "
+    "impacto y tipos de cáncer asociados",
     "Esta página junta lo que ya viste mutación por mutación en el evaluador. La "
     "comparación de tipos de cáncer es <b>descriptiva</b> (co-ocurrencia registrada "
     "en IARC): no implica que el cambio fisicoquímico <i>cause</i> un tipo de cáncer "
@@ -95,7 +101,9 @@ for nombre in opciones:
     clasif = r["afinidad_ADN"].get("clasificacion", "")
     clasif_txt = clasif.upper() if clasif else "por verificar"
     dne = str(r.get("dne", "")).lower()
-    dne_txt = {"yes": "Sí", "moderate": "Moderado"}.get(dne, "No")
+    # "por verificar" NO debe mostrarse como "No": eso implicaría (falsamente)
+    # que se confirmó la ausencia del efecto dominante negativo.
+    dne_txt = {"yes": "Sí", "moderate": "Moderado", "no": "No"}.get(dne, "por verificar")
     est = r.get("estabilidad", {})
     ddg = est.get("ddG_kcal_mol")
     if ddg is None:
@@ -191,6 +199,20 @@ for nombre in opciones:
     val_lbl.append(nombre)
     val_col.append(COLORES_MUT[nombre])
 
+# Varias mutaciones pueden compartir ΔΔG normalizado = 1.0 (el tope de la
+# escala) y quedar muy cerca en X también, lo que choca sus etiquetas de
+# texto (p. ej. R175H y Y220C). Se detectan pares cercanos, en orden de X, y
+# se alterna la posición del texto (arriba/abajo) solo para esos casos.
+_orden_x = sorted(range(len(val_x)), key=lambda i: val_x[i])
+_textpos = ["top center"] * len(val_x)
+for _k in range(1, len(_orden_x)):
+    _i_prev, _i_cur = _orden_x[_k - 1], _orden_x[_k]
+    _cerca_x = abs(val_x[_i_cur] - val_x[_i_prev]) < 0.18
+    _cerca_y = abs(val_y[_i_cur] - val_y[_i_prev]) < 0.1
+    if _cerca_x and _cerca_y:
+        _textpos[_i_prev] = "bottom center"
+        _textpos[_i_cur] = "top center"
+
 fig_val = go.Figure()
 fig_val.add_trace(go.Scatter(
     x=[0, 1], y=[0, 1], mode="lines",
@@ -198,7 +220,7 @@ fig_val.add_trace(go.Scatter(
     name="acuerdo perfecto", hoverinfo="skip",
 ))
 fig_val.add_trace(go.Scatter(
-    x=val_x, y=val_y, mode="markers+text", text=val_lbl, textposition="top center",
+    x=val_x, y=val_y, mode="markers+text", text=val_lbl, textposition=_textpos,
     textfont=dict(family="Georgia, serif", size=12, color="#33465c"),
     marker=dict(size=18, color=val_col, line=dict(color="#33465c", width=1.5)),
     showlegend=False, hovertemplate="%{text}<extra></extra>",
@@ -221,16 +243,17 @@ st.markdown(
     """
     <div class="callout" style="background:#f7f9fb;border-left:4px solid #1f3a5f;">
       <div class="callout-t" style="color:#1f3a5f;">Lo que esto revela</div>
-      <b>R175H</b> queda muy por encima de la diagonal: la heurística le da un índice
-      moderado porque el cambio químico local (Arg→His) es leve, pero el ΔΔG muestra que
-      es de las <b>más</b> desestabilizadas — la física local no «ve» el colapso del
-      pliegue. <b>R248W</b>, al contrario, queda por debajo: la heurística la puntúa muy
-      alto por el gran cambio fisicoquímico, pero su ΔΔG es solo moderado porque su
-      defecto real es de <b>contacto</b> con el ADN, no de plegamiento.
+      <b>R175H</b> y, más aún, <b>Y220C</b> (el ΔΔG más alto de las cinco, 4 kcal/mol)
+      quedan muy por encima de la diagonal: la heurística les da un índice moderado
+      porque el cambio químico local parece leve, pero el ΔΔG muestra que son de las
+      <b>más</b> desestabilizadas — la física local no «ve» el colapso del pliegue.
+      <b>R248W</b>, al contrario, queda por debajo: la heurística la puntúa muy alto por
+      el gran cambio fisicoquímico, pero su ΔΔG es solo moderado porque su defecto real
+      es de <b>contacto</b> con el ADN, no de plegamiento.
       <br><br>
       Por eso nos presentamos como herramienta <b>didáctica</b>, no como predictor: la
       física local simple capta los cambios químicos grandes pero se pierde la estabilidad
-      del pliegue. Un predictor entrenado como <b>AlphaMissense</b> clasifica las 4 como
+      del pliegue. Un predictor entrenado como <b>AlphaMissense</b> clasifica las cinco como
       <i>likely pathogenic</i> — ha aprendido el contexto estructural que a nuestra
       heurística le falta.
     </div>
@@ -238,8 +261,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.caption(
-    "ΔΔG: Bullock & Fersht 1997; Joerger et al. 2006. Clase AlphaMissense: "
-    "Cheng et al. 2023, Science 381:eadg7492."
+    "ΔΔG: Bullock & Fersht 1997; Joerger et al. 2006; Boeckler et al. 2008. Clase "
+    "AlphaMissense: Cheng et al. 2023, Science 381:eadg7492."
 )
 
 # ---------------------------------------------------------------------------
@@ -247,8 +270,8 @@ st.caption(
 # ---------------------------------------------------------------------------
 seccion("Tipos de cáncer asociados")
 st.caption(
-    "Qué tipos de cáncer aparecen junto a cada mutación (columna Topography, IARC). "
-    "Ordenado de más a menos compartido entre las 4 mutaciones. Es una comparación "
+    f"Qué tipos de cáncer aparecen junto a cada mutación (columna Topography, IARC). "
+    f"Ordenado de más a menos compartido entre las {N_MUT} mutaciones. Es una comparación "
     "descriptiva de co-ocurrencia, no una relación causal."
 )
 

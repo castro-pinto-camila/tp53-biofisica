@@ -110,6 +110,15 @@ REFERENCIAS = [
     ("Estabilidad termodinámica (ΔΔG, Tm)",
      "Joerger AC, Fersht AR (2008). Structural biology of the tumor suppressor p53. "
      "Annu Rev Biochem 77:557–582 (revisión).", None, None),
+    ("Estabilidad termodinámica (ΔΔG, Tm)",
+     "Boeckler FM, Joerger AC, Jaggi G, Rutherford TJ, Veprintsev DB, Fersht AR (2008). "
+     "Targeted rescue of a destabilized mutant of p53 by an in silico screened drug "
+     "(Y220C; cavidad y ΔΔG). PNAS 105:10360–10365.", "10.1073/pnas.0805326105", None),
+    ("Estabilidad termodinámica (ΔΔG, Tm)",
+     "Mavridi D, Funk JS, Balourdas D-I, Krämer A, Khan Tareque R, Timofeev O, et al. "
+     "(2026). Targeting the p53 cancer mutants Y220C, Y220N, and Y220S with the "
+     "small-molecule stabilizer rezatapopt (ΔTm de Y220C). Cell Death Dis 17:268.",
+     "10.1038/s41419-026-08492-9", None),
 
     ("Escalas fisicoquímicas de aminoácidos",
      "Kyte J, Doolittle RF (1982). A simple method for displaying the hydropathic "

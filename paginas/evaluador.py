@@ -175,8 +175,12 @@ if dne == "yes":
     dne_tag = '<div class="tag" style="background:#f4e6e6;color:#8f2f2f;">Efecto dominante negativo: Sí</div>'
 elif dne == "moderate":
     dne_tag = '<div class="tag" style="background:#f6efdd;color:#8a6a12;">Efecto dominante negativo: Moderado</div>'
-else:
+elif dne == "no":
     dne_tag = '<div class="tag" style="background:#eef0f3;color:#5a6570;">Efecto dominante negativo: No</div>'
+else:
+    # "por verificar" u otro valor no confirmado: NO mostrar "No", que
+    # implicaría (falsamente) que se confirmó la ausencia del efecto.
+    dne_tag = '<div class="tag" style="background:#eef0f3;color:#5a6570;">Efecto dominante negativo: por verificar</div>'
 
 gof_row = ""
 if r.get("gof") and r["gof"] != "No reportado":
@@ -373,6 +377,20 @@ ca.markdown(f"**Afinidad de referencia (Kd):** {afinidad.get('kd_wt', '—')}")
 cb.markdown(f"**Clasificación:** {clasif.upper() if clasif else 'por verificar'}")
 st.markdown(f"**Efecto del mutante.** {afinidad.get('efecto_mutante', '—')}")
 st.caption(f"Referencia: {afinidad.get('referencia', '—')}")
+
+# --- Dato de interés (opcional; solo si la mutación tiene uno curado) ---
+_dato = r.get("dato_interes")
+if _dato:
+    st.markdown(
+        f"""
+        <div class="callout" style="background:#eaf0f5;border-left:4px solid #2c6b8f;">
+          <div class="callout-t" style="color:#2c6b8f;">✦ {_dato.get('titulo', 'Dato de interés')}</div>
+          {_dato.get('texto', '')}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.caption(f"Fuente: {_dato.get('fuente', '—')}")
 
 # ---------------------------------------------------------------------------
 # 6-bis. Estabilidad termodinámica del pliegue (ΔΔG) — dato medido

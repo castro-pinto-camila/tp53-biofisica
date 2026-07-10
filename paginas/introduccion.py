@@ -204,8 +204,8 @@ elif paso == 1:
 elif paso == 2:
     st.markdown("#### Organización en dominios funcionales")
     st.caption(
-        "Mapa lineal de la proteína (393 aminoácidos). Las líneas punteadas marcan "
-        "la posición de las 4 mutaciones que se analizan en el evaluador."
+        f"Mapa lineal de la proteína (393 aminoácidos). Las líneas punteadas marcan "
+        f"la posición de las {len(mutaciones)} mutaciones que se analizan en el evaluador."
     )
 
     largo = gen["longitud_aa"]
@@ -220,43 +220,63 @@ elif paso == 2:
         type="rect", x0=1, x1=largo, y0=0, y1=1,
         fillcolor="#eef0f3", line=dict(width=0), layer="below",
     )
-    # Los dominios "oligomerizacion" (319-357) y "regulador" (364-393) quedan
-    # muy juntos en la escala 1-393; se alterna la altura de cada etiqueta
-    # para que no se superpongan.
+    # Cada dominio en su propio nivel vertical (en vez de alternar solo 2):
+    # con 3 dominios, alternar entre 2 alturas deja al primero y al tercero
+    # ("unión al ADN" y "región reguladora") en la misma línea, y sus
+    # etiquetas -largas- chocan aunque los dominios estén lejos en X.
+    _niveles_dominio = [1.28, 1.55, 1.82]
     for i, (clave, d) in enumerate(dominios.items()):
         color = colores_dominio.get(clave, "#9aa0a6")
         fig.add_shape(
             type="rect", x0=d["inicio"], x1=d["fin"], y0=0, y1=1,
             fillcolor=color, opacity=0.88, line=dict(width=0),
         )
-        y_etiqueta = 1.28 if i % 2 == 0 else 1.55
+        y_etiqueta = _niveles_dominio[i % len(_niveles_dominio)]
         centro = (d["inicio"] + d["fin"]) / 2
         fig.add_annotation(
             x=centro, y=y_etiqueta, text=d["nombre"], showarrow=False,
             font=dict(size=11, family="Georgia, serif", color="#33465c"),
         )
 
-    # Las mutaciones G245S (245) y R248W (248) quedan a solo 3 posiciones de
-    # distancia; se alterna la profundidad de cada etiqueta (orden por
-    # posición) para que las líneas y el texto no se crucen.
+    # Etiquetas de mutación: algoritmo "greedy" de niveles. Ordenadas por
+    # posición, cada una se coloca en el primer nivel cuya última mutación
+    # colocada quede a más de UMBRAL posiciones de distancia; si ninguno
+    # sirve, reutiliza el último. Así se adapta solo sin importar cuántas
+    # mutaciones haya ni qué tan juntas caigan (a diferencia de alternar
+    # ciegamente 2 alturas, que falla si 3+ quedan cerca entre sí).
+    # El texto rotado (-40°) mide ~45-48px de alto ya renderizado; con niveles
+    # separados por solo 0.3 (~24px a la escala de este gráfico) los niveles
+    # vecinos chocan verticalmente aunque el algoritmo los separe "en teoría".
+    # 0.8 de separación (~64px) es mayor que la altura real del texto.
+    UMBRAL_COLISION_POS = 35
+    niveles_y = [-0.4, -1.2, -2.0]
+    ultima_pos_por_nivel = [None] * len(niveles_y)
     mutaciones_ordenadas = sorted(mutaciones.items(), key=lambda kv: kv[1]["posicion"])
-    for i, (nombre, m) in enumerate(mutaciones_ordenadas):
-        y_fondo = -0.4 if i % 2 == 0 else -0.65
+    for nombre, m in mutaciones_ordenadas:
+        pos = m["posicion"]
+        nivel_idx = len(niveles_y) - 1
+        for idx in range(len(niveles_y)):
+            libre = ultima_pos_por_nivel[idx]
+            if libre is None or (pos - libre) >= UMBRAL_COLISION_POS:
+                nivel_idx = idx
+                break
+        ultima_pos_por_nivel[nivel_idx] = pos
+        y_fondo = niveles_y[nivel_idx]
         fig.add_shape(
-            type="line", x0=m["posicion"], x1=m["posicion"], y0=y_fondo + 0.15, y1=1.15,
+            type="line", x0=pos, x1=pos, y0=y_fondo + 0.15, y1=1.15,
             line=dict(color="#1a1a1a", width=1.5, dash="dot"),
         )
         fig.add_annotation(
-            x=m["posicion"], y=y_fondo, text=f"{nombre} ({m['posicion']})",
+            x=pos, y=y_fondo, text=f"{nombre} ({pos})",
             showarrow=False, textangle=-40,
             font=dict(size=10, family="Georgia, serif", color="#33465c"),
         )
 
     fig.update_xaxes(range=[1, largo + 12], title="Posición (aminoácido)", showgrid=False)
-    fig.update_yaxes(visible=False, range=[-0.95, 1.85])
+    fig.update_yaxes(visible=False, range=[-2.65, 2.15])
     fig.update_layout(
-        height=340,
-        margin=dict(t=50, b=90, l=20, r=70),
+        height=530,
+        margin=dict(t=50, b=100, l=20, r=70),
         template="simple_white",
         font=dict(family="Georgia, serif", color="#33465c"),
     )
@@ -286,8 +306,9 @@ elif paso == 2:
 elif paso == 3:
     st.markdown("#### Secuencia completa y posiciones que pueden mutar")
     st.caption(
-        "Secuencia canónica de p53 (393 aminoácidos, código de una letra). Los "
-        "residuos resaltados son las 4 mutaciones hotspot que analiza el evaluador."
+        f"Secuencia canónica de p53 (393 aminoácidos, código de una letra). Los "
+        f"residuos resaltados son las {len(mutaciones)} mutaciones hotspot que analiza "
+        f"el evaluador."
     )
 
     secuencia = gen["secuencia_aa"]
@@ -327,8 +348,9 @@ elif paso == 3:
     st.markdown(
         "La **mayoría** de las mutaciones en TP53 son **somáticas**: surgen durante la "
         "vida en una célula concreta y **no se heredan**. Una **minoría** son "
-        "**germinales** (heredadas) y causan el **síndrome de Li-Fraumeni** — las 4 "
-        "mutaciones de esta app aparecen en ambos casos. Muchos de los puntos calientes "
+        f"**germinales** (heredadas) y causan el **síndrome de Li-Fraumeni** — las "
+        f"{len(mutaciones)} mutaciones de esta app aparecen en ambos casos. Muchos de "
+        "los puntos calientes "
         "más frecuentes (R175, R248, R282) mutan tanto por un proceso **interno**: la "
         "citosina metilada de los sitios «CpG» se transforma sola, sin necesidad de un "
         "agente externo. En cambio, otras mutaciones de TP53 llevan la **firma de "
@@ -342,7 +364,7 @@ elif paso == 3:
         "(doi:10.1038/cdd.2017.180)."
     )
 
-    # --- Red de mutaciones y tipos de cáncer (vista general de las 4) ---
+    # --- Red de mutaciones y tipos de cáncer (vista general de todas) ---
     st.markdown("##### Red de mutaciones y tipos de cáncer")
     st.caption(
         "Nodos rojos: mutaciones. Nodos azules: tipos de cáncer (columna Topography de "

@@ -136,5 +136,43 @@
       "alphamissense_fuente": "Cheng et al. 2023, Science 381:eadg7492 (AlphaMissense)"
     },
     "canceres": ["Colon", "Estómago", "Piel", "Hígado", "Esófago"]
+  },
+  "Y220C": {
+    "nombre": "Y220C",
+    "posicion": 220,
+    "aa_original": "Tyr",
+    "aa_mutado": "Cys",
+    "dominio": "union_ADN",
+    "conservado": true,
+    "tipo_efecto": "Pérdida de función",
+    "gof": "No reportado",
+    "dne": "por verificar",
+    "casos_iarc": "por verificar",
+    "clinvar_germinal": "Likely pathogenic (registro individual, revisión limitada)",
+    "clinvar_somatico": "por verificar",
+    "enfermedad": "Síndrome de Li-Fraumeni (reportada en 15 familias); también somática",
+    "afinidad_ADN": {
+      "clasificacion": "structural",
+      "kd_wt": "~7 nM (tipo salvaje)",
+      "efecto_mutante": "Tyr220 no toca el ADN: es un residuo voluminoso que rellena el núcleo del dominio. Al mutar a cisteína (mucho más pequeña) se abre una cavidad superficial en la proteína, que la desestabiliza y colapsa su plegamiento a temperatura corporal.",
+      "referencia": "Boeckler et al. 2008, PNAS 105:10360-10365; Joerger & Fersht 2008."
+    },
+    "estabilidad": {
+      "ddG_kcal_mol": 4.0,
+      "ddG_precision": "medido",
+      "ddG_fuente": "Boeckler, Joerger, Jaggi, Rutherford, Veprintsev & Fersht 2008, PNAS 105:10360-10365 (doi:10.1073/pnas.0805326105)",
+      "tm_celsius": 33.9,
+      "delta_tm_celsius": -9.0,
+      "tm_fuente": "ΔTm verificado en Mavridi et al. 2026, Cell Death Dis 17:268 (doi:10.1038/s41419-026-08492-9); Tm absoluto aproximado combinando ese ΔTm con el Tm del tipo salvaje de Life 2023, 13:31 (42.9 °C)",
+      "alphamissense_clase": "likely pathogenic",
+      "alphamissense_nota": "clasificación a nivel de clase; score decimal exacto no incluido",
+      "alphamissense_fuente": "Cheng et al. 2023, Science 381:eadg7492 (AlphaMissense)"
+    },
+    "dato_interes": {
+      "titulo": "Una cavidad que se puede \"rellenar\" con fármacos",
+      "texto": "Y220C es la mutación de p53 más estudiada para diseño de fármacos: es la 9ª más frecuente en cáncer (más de 125 000 casos nuevos al año en el mundo) y su cavidad recién formada puede ser ocupada por moléculas pequeñas que restauran la estabilidad. El compuesto fundador, PhiKan083, fue el primero en \"encajar\" en ese hueco; desarrollos posteriores de esa misma familia llegaron a estabilizadores en ensayos clínicos (rezatapopt/PC14586).",
+      "fuente": "Boeckler et al. 2008, PNAS 105:10360-10365 (doi:10.1073/pnas.0805326105); Mavridi et al. 2026, Cell Death Dis 17:268 (doi:10.1038/s41419-026-08492-9)."
+    },
+    "canceres": ["Ovario", "Endometrio", "Mama", "Pulmón"]
   }
 }

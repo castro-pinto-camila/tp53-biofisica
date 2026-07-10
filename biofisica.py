@@ -321,19 +321,25 @@ def generar_implicancias(resultado):
     clasif = afinidad.get("clasificacion", "")
     perdida_carga = resultado["cambios"]["delta_carga"] < 0
 
+    # Frase de casos IARC: si el conteo es un número, "registrada N veces en
+    # IARC"; si es texto ("por verificar"), no forzar un numeral ahí.
+    _casos = resultado.get("casos_iarc", "?")
+    if isinstance(_casos, (int, float)):
+        _frase_iarc = "Registrada %s veces en IARC" % _casos
+    else:
+        _frase_iarc = "Casos en IARC: %s" % _casos
+    _clinvar = resultado.get("clinvar_germinal", "")
+
     # Clínica
     if dne == "yes":
         clinica = ("El efecto dominante negativo implica que basta una copia mutada para "
                    "comprometer la función supresora, asociado a un curso típicamente más "
-                   "agresivo. Registrada %s veces en IARC (%s)."
-                   % (resultado.get("casos_iarc", "?"), resultado.get("clinvar_germinal", "")))
+                   "agresivo. %s (%s)." % (_frase_iarc, _clinvar))
     elif dne == "moderate":
         clinica = ("El efecto dominante negativo moderado matiza el impacto sobre el "
-                   "tetrámero. Registrada %s veces en IARC (%s)."
-                   % (resultado.get("casos_iarc", "?"), resultado.get("clinvar_germinal", "")))
+                   "tetrámero. %s (%s)." % (_frase_iarc, _clinvar))
     else:
-        clinica = ("Mutación patogénica registrada %s veces en IARC (%s)."
-                   % (resultado.get("casos_iarc", "?"), resultado.get("clinvar_germinal", "")))
+        clinica = ("Mutación patogénica. %s (%s)." % (_frase_iarc, _clinvar))
 
     # Terapéutica
     if clasif == "contact" and perdida_carga:
@@ -464,6 +470,16 @@ def generar_texto_temperatura(resultado):
             "de desplegamiento y pierde la unión. Es el ejemplo más nítido de que la "
             "función depende de la estabilidad térmica del pliegue."
             % (tm, no_une, une_hasta, no_une)
+        )
+    if clasif == "structural" and ddg is not None and tm is not None:
+        delta_tm = est.get("delta_tm_celsius")
+        delta_txt = (" (ΔTm = %+.1f °C respecto al tipo salvaje)" % delta_tm) if delta_tm is not None else ""
+        return (
+            "Con una desestabilización de %s%.0f kcal/mol, su Tm baja a %.1f °C%s. Como el "
+            "dominio silvestre ya es solo marginalmente estable, esta caída lo deja "
+            "mayormente desplegado a 37 °C: la unión al ADN queda abolida no por un defecto "
+            "de contacto, sino porque la proteína pierde su forma."
+            % (">" if est.get("ddG_precision") == "límite inferior" else "≈", ddg, tm, delta_txt)
         )
     if clasif == "structural" and ddg is not None and ddg >= 2:
         return (
